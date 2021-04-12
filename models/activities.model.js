@@ -17,7 +17,7 @@ const Activity = function (activity) {
 // define method getAll to handle getting all activities from DB
 // result = "(error, data)", meaning it will return either an error message or some sort of data 
 Activity.getAll = (result) => {
-    sql.query("SELECT * FROM activities", (err, res) => {
+    sql.query("SELECT * FROM atividade", (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -26,7 +26,7 @@ Activity.getAll = (result) => {
     });
 };
 Activity.findById = (id, result) => {
-    sql.query("SELECT * FROM activities WHERE id=?", [id], (err, res) => {
+    sql.query("SELECT * FROM atividade WHERE idAtividade=?", [id], (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -39,7 +39,7 @@ Activity.findById = (id, result) => {
     });
 };
 Activity.remove = (id, result) => {
-    sql.query("DELETE FROM activities WHERE id=?", [id], (err, res) => {
+    sql.query("DELETE FROM atividade WHERE idAtividade=?", [id], (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -52,4 +52,4 @@ Activity.remove = (id, result) => {
     });
 };
 // EXPORT MODEL (required by CONTROLLER)
-module.exports = Tutorial;
+module.exports = Activity;
