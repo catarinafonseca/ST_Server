@@ -46,3 +46,37 @@ exports.delete = (req, res) => {
             });
     }); 
 };
+
+//create
+exports.create = (req, res) => {
+    // Validate request
+    if (!req.body || !req.body.title) {
+        res.status(400).json({ message: "Title can not be empty!" });
+        return;
+    }
+
+    // Create a Tutorial object
+    const activity = {
+        name: req.body.name,
+        description: req.body.description,
+        date: req.body.date,
+        hour: req.body.hour,
+        numPeople: req.body.numPeople,
+        certificate: req.body.certificate,
+        image: req.body.image,
+    };
+
+    // Save Tutorial in the database
+    Activity.create(activity, (err, data) => {
+        if (err)
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the Activity."
+            });
+        else{
+            // all is OK, send new tutorial ID in the response
+            res.status(201).json({ message: "New activity created.", location: "/activities/" + data.insertId });
+        } 
+            
+    });
+};
+

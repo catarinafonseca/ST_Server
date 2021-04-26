@@ -10,7 +10,9 @@ router.use((req, res, next) => {
     });
     next()
 })
-router.get('/', activityController.findAll);
+router.route('/')
+    .get(activityController.findAll)
+    .post(activityController.create);
 
 router.get('/:activityID', activityController.findOne);
 
