@@ -1,5 +1,7 @@
 // get resource model (definition and DB operations)
 const Activity = require('../models/activities.model.js');
+
+
 // EXPORT function to display list of all Activitys (required by ROUTER)
 exports.findAll = (req, res) => {
     Activity.getAll((err, data) => {
@@ -50,20 +52,23 @@ exports.delete = (req, res) => {
 //create
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body || !req.body.title) {
-        res.status(400).json({ message: "Title can not be empty!" });
+    console.log(req.body);
+    console.log('aqui');
+    if (!req.body) {
+        res.status(400).json({ message: "Nome can not be empty!" });
         return;
-    }
+    } 
+    
 
     // Create a Tutorial object
     const activity = {
-        name: req.body.name,
-        description: req.body.description,
-        date: req.body.date,
-        hour: req.body.hour,
-        numPeople: req.body.numPeople,
-        certificate: req.body.certificate,
-        image: req.body.image,
+        nome: req.body.nome,
+        desc_atividade: req.body.desc_atividade,
+        num_participantes: req.body.num_participantes,
+        imagem: req.body.imagem,
+        certificado_SN: req.body.certificado_SN,
+        data_inicio: req.body.data_inicio,
+        hora_inicio: req.body.hora_inicio,
     };
 
     // Save Tutorial in the database
