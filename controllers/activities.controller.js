@@ -7,7 +7,7 @@ exports.findAll = (req, res) => {
     Activity.getAll((err, data) => {
         if (err) // send error response
             res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Activitys."
+                message: err.message || "Some error occurred while retrieving Activities."
             });
         else
             res.status(200).json(data); // send OK response with all Activitys data
@@ -52,8 +52,6 @@ exports.delete = (req, res) => {
 //create
 exports.create = (req, res) => {
     // Validate request
-    console.log(req.body);
-    console.log('aqui');
     if (!req.body) {
         res.status(400).json({ message: "Nome can not be empty!" });
         return;
