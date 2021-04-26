@@ -5,7 +5,7 @@ exports.findAll = (req, res) => {
     Activity.getAll((err, data) => {
         if (err) // send error response
             res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Activitys."
+                message: err.message || "Some error occurred while retrieving Activities."
             });
         else
             res.status(200).json(data); // send OK response with all Activitys data
@@ -50,20 +50,20 @@ exports.delete = (req, res) => {
 //create
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body || !req.body.title) {
-        res.status(400).json({ message: "Title can not be empty!" });
+    if (!req.body || !req.body.nome) {
+        res.status(400).json({ message: "Nome can not be empty!" });
         return;
     }
 
     // Create a Tutorial object
     const activity = {
-        name: req.body.name,
-        description: req.body.description,
-        date: req.body.date,
-        hour: req.body.hour,
-        numPeople: req.body.numPeople,
-        certificate: req.body.certificate,
-        image: req.body.image,
+        nome: req.body.nome,
+        descricao: req.body.descricao,
+        data_inicio: req.body.data_inicio,
+        hora_inicio: req.body.hora_inicio,
+        num_participantes: req.body.num_participantes,
+        certificado_SN: req.body.certificado_SN,
+        imagem: req.body.imagem,
     };
 
     // Save Tutorial in the database
