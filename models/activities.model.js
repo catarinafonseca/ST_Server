@@ -55,5 +55,33 @@ Activity.remove = (id, result) => {
         result({ kind: 'not found' }, null); // the result will be sent to the CONTROLLER
     });
 };
+Activity.updateById = (idActivity, activity, result) => {
+
+    let query = 'UPDATE atividade SET ? WHERE ?';
+
+    let q = sql.query(
+        query,
+        // OR [tutorial.title, tutorial.description, tutorial.published, id]
+        [activity, {id: idActivity}], // objects are turned into key = 'val' pairs for each enumerable property
+        (err, res) => {
+            
+            //console.log(q.sql); // to check the query string
+
+            if (err) {
+                result(err, null);
+                return;
+            }
+            // res.affectedRows: number of selected rows to update
+            // res.changedRows: number of effectively updated rows
+            
+            // not found Tutorials with the specified ID: setup a new error property 'kind'
+            if (res.affectedRows == 0) {
+                result({ kind: "not_found" }, null);
+                return;
+            }
+
+            result(null, res);
+        });
+};
 // EXPORT MODEL (required by CONTROLLER)
 module.exports = Activity;

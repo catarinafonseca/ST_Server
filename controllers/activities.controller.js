@@ -83,3 +83,37 @@ exports.create = (req, res) => {
     });
 };
 
+//update
+exports.update = (req, res) => {
+    // Validate request
+    if (!req.body || !req.body.nome) {
+        res.status(400).json({ message: "Request must have specify the new title!" });
+        return;
+    }
+
+    // Create a Activity object
+    const activity = {
+        nome: req.body.nome,
+        desc_atividade: req.body.desc_atividade,
+        num_participantes: req.body.num_participantes,
+        imagem: req.body.imagem,
+        certificado_SN: req.body.certificado_SN,
+        data_inicio: req.body.data_inicio,
+        hora_inicio: req.body.hora_inicio,
+    };
+
+    // Update Activity in the database
+    Activity.updateById(req.params.activityID, activity, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).json({
+                    message: `Not found activity with id ${req.params.activityID}.`
+                });
+            } else {
+                res.status(500).json({
+                    message: "Error updating activity with id " + req.params.activityID
+                });
+            }
+        } else res.status(200).json({ message: "Updated activity.", location: `/activities/${req.params.activityID}` });
+    });
+};

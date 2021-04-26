@@ -14,9 +14,12 @@ router.route('/')
     .get(activityController.findAll)
     .post(activityController.create);
 
-router.get('/:activityID', activityController.findOne);
+router.route('/:activityID')
+    .get(activityController.findOne)
+    .delete(activityController.delete)
+    .put(activityController.update);
 
-router.delete('/:activityID', activityController.delete);
+
 
 //send a predefined error message for invalid routes on TUTORIALS
 router.all('*', function (req, res) {
