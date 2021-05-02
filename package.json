@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/catarinafonseca/ST_Server#readme",
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.7",
+    "sequelize": "^6.6.2"
   },
   "dependencies": {
     "cors": "^2.8.5",

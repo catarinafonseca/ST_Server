@@ -3,7 +3,7 @@ const Activity = require('../models/activities.model.js');
 
 
 // EXPORT function to display list of all Activitys (required by ROUTER)
-exports.findAll = (req, res) => {
+/*exports.findAll = (req, res) => {
     Activity.getAll((err, data) => {
         if (err) // send error response
             res.status(500).send({
@@ -12,7 +12,7 @@ exports.findAll = (req, res) => {
         else
             res.status(200).json(data); // send OK response with all Activitys data
     });
-};
+};*/
 //list one Activity
 exports.findOne = (req, res) => {
     Activity.findById(req.params.activityID, (err, data) => {
@@ -116,4 +116,37 @@ exports.update = (req, res) => {
             }
         } else res.status(200).json({ message: "Updated activity.", location: `/activities/${req.params.activityID}` });
     });
+};
+exports.findAll = (req, res) => {
+    const {
+        text,
+        local,
+        type
+    } = req.query;
+    let condition = type ? {
+        text: {
+            [Op.like]: `%${type}%`
+        }
+    } : null;
+    condition += local ? {
+        local: {
+            [Op.like]: `%${local}%`
+        }
+    } : null;
+    condition += text ? {
+        type: {
+            [Op.like]: `%${text}%`
+        }
+    } : null;
+    Activity.findAndCountAll({
+        where: condition
+    })
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving tutorials."
+            });
+        })
 };
