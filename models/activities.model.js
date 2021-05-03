@@ -62,7 +62,7 @@ Activity.updateById = (idActivity, activity, result) => {
     let q = sql.query(
         query,
         // OR [tutorial.title, tutorial.description, tutorial.published, id]
-        [activity, { id: idActivity }], // objects are turned into key = 'val' pairs for each enumerable property
+        [activity, { idAtividade: idActivity }], // objects are turned into key = 'val' pairs for each enumerable property
         (err, res) => {
 
             //console.log(q.sql); // to check the query string
