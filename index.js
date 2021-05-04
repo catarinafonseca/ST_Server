@@ -13,8 +13,10 @@ app.get('/', function (req, res) {
     res.status(200).json({ message: 'home -- ACTIVITIES api' });
 });
 
-// routing middleware for resource TUTORIALS
+// routing middleware for resource ACTIVITIES
 app.use('/activities', require('./routes/activities.routes.js'))
+// routing middleware for resource USERS
+app.use('/users', require('./routes/users.routes.js'))
 // handle invalid routes
 app.get('*', function (req, res) {
     res.status(404).json({ message: 'WHAT???' });

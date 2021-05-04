@@ -1,5 +1,5 @@
-const sql = require("./db.js"); // get DB connection
-// define ACTIVITY model constructor
+const sql = require("./db.js");
+
 const Activity = function (activity) {
     this.nome = activity.nome;
     this.desc_atividade = activity.desc_atividade;
@@ -9,15 +9,15 @@ const Activity = function (activity) {
     this.data_inicio = activity.data_inicio;
     this.hora_inicio = activity.hora_inicio;
 };
-// define method getAll to handle getting all activities from DB
-// result = "(error, data)", meaning it will return either an error message or some sort of data 
+
+// METHODS
 Activity.getAll = (result) => {
     sql.query("SELECT * FROM atividade", (err, res) => {
         if (err) {
             result(err, null);
             return;
         }
-        result(null, res); // the result will be sent to the CONTROLLER
+        result(null, res);
     });
 };
 Activity.create = (newActivity, result) => {
@@ -39,7 +39,7 @@ Activity.findById = (id, result) => {
             result(null, res[0]);
             return
         }
-        result({ kind: 'not found' }, null); // the result will be sent to the CONTROLLER
+        result({ kind: 'not found' }, null);
     });
 };
 Activity.remove = (id, result) => {
@@ -56,30 +56,20 @@ Activity.remove = (id, result) => {
     });
 };
 Activity.updateById = (idActivity, activity, result) => {
-
     let query = 'UPDATE atividade SET ? WHERE ?';
 
     let q = sql.query(
-        query,
-        // OR [tutorial.title, tutorial.description, tutorial.published, id]
-        [activity, { idAtividade: idActivity }], // objects are turned into key = 'val' pairs for each enumerable property
-        (err, res) => {
-
+        query,[activity, { idAtividade: idActivity }],(err, res) => {
             //console.log(q.sql); // to check the query string
 
             if (err) {
                 result(err, null);
                 return;
             }
-            // res.affectedRows: number of selected rows to update
-            // res.changedRows: number of effectively updated rows
-
-            // not found Tutorials with the specified ID: setup a new error property 'kind'
             if (res.affectedRows == 0) {
                 result({ kind: "not_found" }, null);
                 return;
             }
-
             result(null, res);
         });
 };
@@ -93,7 +83,7 @@ Activity.findForText = (text, result) => {
             result(null, res[0]);
             return
         }
-        result({ kind: 'not found' }, null); // the result will be sent to the CONTROLLER
+        result({ kind: 'not found' }, null);
     });
 };
 Activity.findForType = (type, result) => {
@@ -106,7 +96,7 @@ Activity.findForType = (type, result) => {
             result(null, res[0]);
             return
         }
-        result({ kind: 'not found' }, null); // the result will be sent to the CONTROLLER
+        result({ kind: 'not found' }, null);
     });
 };
 Activity.findForLocal = (local, result) => {
@@ -119,7 +109,7 @@ Activity.findForLocal = (local, result) => {
             result(null, res[0]);
             return
         }
-        result({ kind: 'not found' }, null); // the result will be sent to the CONTROLLER
+        result({ kind: 'not found' }, null);
     });
 };
 /* se fosse só verificar o tipo

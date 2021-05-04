@@ -1,6 +1,6 @@
 const express = require('express');
 let router = express.Router();
-const activityController = require('../controllers/activities.controller');
+const userController = require('../controllers/users.controller');
 
 router.use((req, res, next) => {
     const start = Date.now();
@@ -10,20 +10,20 @@ router.use((req, res, next) => {
     });
     next()
 })
+
 router.route('/')
-    .get(activityController.findAll)
-    .post(activityController.create)
+    .get(userController.findAll)
+    .post(userController.create)
 
-router.route('/:activityID')
-    .get(activityController.findOne)
-    .delete(activityController.delete)
-    .put(activityController.update);
+router.route('/:userID')
+    .get(userController.findOne)
+    .delete(userController.delete)
+    .patch(userController.update);
 
-//router.route('/activities?type={tipo}&local={local}&text={searchText}')
 
-//send a predefined error message for invalid routes on activities
+//send a predefined error message for invalid routes on users
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'ACTIVITIES: what???' });
+    res.status(404).json({ message: 'USERS: what???' });
 })
 // EXPORT ROUTES (required by APP)
 module.exports = router;
