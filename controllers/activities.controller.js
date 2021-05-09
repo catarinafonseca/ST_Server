@@ -43,21 +43,21 @@ exports.delete = (req, res) => {
     }); 
 };
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem || !req.body.certificado_SN || !req.body.data_inicio || !req.body.hora_inicio) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    } 
-
     const activity = {
         nome: req.body.nome,
         desc_atividade: req.body.desc_atividade,
         num_participantes: req.body.num_participantes,
         imagem: req.body.imagem,
         certificado_SN: req.body.certificado_SN,
-        data_inicio: req.body.data_inicio,
-        hora_inicio: req.body.hora_inicio,
+        data_hora : req.body.data_hora,
+        idLocal : req.body.idLocal,
+        idCategoria : req.body.idCategoria
     };
+    // Validate request
+    if (!req.body || !activity) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    } 
 
     Activity.create(activity, (err, data) => {
         if (err)
@@ -70,21 +70,21 @@ exports.create = (req, res) => {
     });
 };
 exports.update = (req, res) => {
-    // Validate request
-    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem || !req.body.certificado_SN || !req.body.data_inicio || !req.body.hora_inicio) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
-
     const activity = {
         nome: req.body.nome,
         desc_atividade: req.body.desc_atividade,
         num_participantes: req.body.num_participantes,
         imagem: req.body.imagem,
         certificado_SN: req.body.certificado_SN,
-        data_inicio: req.body.data_inicio,
-        hora_inicio: req.body.hora_inicio,
+        data_hora: req.body.data_hora,
+        idLocal: req.body.idLocal,
+        idCategoria: req.body.idCategoria
     };
+    // Validate request
+    if (!req.body || !activity) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
 
     Activity.updateById(req.params.activityID, activity, (err, data) => {
         if (err) {
@@ -102,7 +102,22 @@ exports.update = (req, res) => {
             res.status(200).json({ message: "Updated activity.", location: `/activities/${req.params.activityID}` });
     });
 };
-/* exports.findAll = (req, res) => {
+/* 
+exports.findFilters = (req, res) => {
+    Activity.findByType(req.params.type, (err, data) => {
+        console.log(req.params.typ);
+        if (err) {
+            if (err.kind === 'not found')
+                res.status(404).json({
+                    message: `Not found Activity with id ${req.params.activityID}.`
+                });
+            else
+                res.status(500).json({
+                    message: `Error retrieving Activity with id ${req.params.activityID}.`
+                });
+        } else
+            res.status(200).json(data);
+    });
     const {
         text,
         local,
@@ -133,6 +148,6 @@ exports.update = (req, res) => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving tutorials."
             });
-        })
-};
- */
+        }) 
+};*/
+ 

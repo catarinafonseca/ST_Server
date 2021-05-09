@@ -6,8 +6,9 @@ const Activity = function (activity) {
     this.num_participantes = activity.num_participantes;
     this.imagem = activity.imagem;
     this.certificado_SN = activity.certificado_SN;
-    this.data_inicio = activity.data_inicio;
-    this.hora_inicio = activity.hora_inicio;
+    this.data_hora = activity.data_hora;
+    this.idLocal = activity.idLocal;
+    this.idCategoria = activity.idCategoria;
 };
 
 // METHODS
@@ -73,8 +74,9 @@ Activity.updateById = (idActivity, activity, result) => {
             result(null, res);
         });
 };
-Activity.findForText = (text, result) => {
-    sql.query("SELECT * FROM atividade WHERE textAtividade=?", [text], (err, res) => {
+
+/* Activity.findForText = (text, result) => {
+    sql.query("SELECT * FROM atividade WHERE nome=?", [text], (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -86,8 +88,8 @@ Activity.findForText = (text, result) => {
         result({ kind: 'not found' }, null);
     });
 };
-Activity.findForType = (type, result) => {
-    sql.query("SELECT * FROM atividade WHERE typeAtividade=?", [type], (err, res) => {
+Activity.findByType = (type, result) => {
+    sql.query("SELECT * FROM atividade WHERE idCategoria = (SELECT idCategoria FROM categoria WHERE type = ?)", [type], (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -111,7 +113,7 @@ Activity.findForLocal = (local, result) => {
         }
         result({ kind: 'not found' }, null);
     });
-};
+}; */
 /* se fosse só verificar o tipo
 exports.findAll = (req, res) => {
     const {

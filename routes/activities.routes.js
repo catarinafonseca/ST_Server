@@ -18,7 +18,9 @@ router.route('/:activityID')
     .get(activityController.findOne)
     .delete(activityController.delete)
     .put(activityController.update);
-
+    
+/* router.route('/activities?type={tipo}')
+    .get(activityController.findFilters) */
 //router.route('/activities?type={tipo}&local={local}&text={searchText}')
 
 //send a predefined error message for invalid routes on activities
