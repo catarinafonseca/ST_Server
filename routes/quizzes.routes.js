@@ -17,7 +17,7 @@ router.route('/')
 
  router.route('/:quizID')
     .get(quizController.findOne)
-/*  .delete(userController.delete) */
+    .delete(quizController.delete)
 
 
 //send a predefined error message for invalid routes on users
