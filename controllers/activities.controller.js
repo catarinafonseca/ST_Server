@@ -1,7 +1,7 @@
 const Activity = require('../models/activities.model.js');
 
 exports.findAll = (req, res) => {
-    Activity.getAll((err, data) => {
+    Activity.getAll(req.query,(err, data) => {
         if (err)
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Activities."

@@ -12,15 +12,12 @@ const Activity = function (activity) {
 };
 
 // METHODS
-Activity.getAll = (result) => {
-    const obj = {
-        "nome": "",
-        "type": "",
-        "local": "",
-    }
-
+Activity.getAll = (query,result) => {
+    
+    const obj = query
+    console.log(query);
     // example of how to use a whitelist
-    const whitelist = ['nome', 'type', 'local'];
+    const whitelist = ['nome', 'idLocal', 'idCategoria'];
 
     // set up an empty array to contain the WHERE conditions
     let where = [];
@@ -35,10 +32,19 @@ Activity.getAll = (result) => {
         if ('' === obj[key]) {
             return;
         }
+        console.log(obj[key]);
         // if we've made it this far, add the clause to the array of conditions
-        if (obj[key] === nome) {
-            where.push(`\`${key}\` like "${obj[key]}"`);
-        } else {
+       
+        if (obj[key] === 'idLocal') {
+            where.push(`\`${key}\` = "${obj[key]}"`);
+        } 
+        if (obj[key] === 'idCategoria') {
+            where.push(`\`${key}\` = "${obj[key]}"`);
+        }  
+        if (obj[key] === 'nome') {
+            where.push(`\`${key}\` like %${obj[key]}%`);
+        }  
+        else {
             where.push(`\`${key}\` = "${obj[key]}"`);
         }
 
@@ -52,7 +58,7 @@ Activity.getAll = (result) => {
         where = `WHERE ${where}`;
     }
 
-    const queryStr = `SELECT * FROM atividade ${where}`;
+    const queryStr = `SELECT * FROM atividade  ${where}`;
 
     console.log(queryStr);
     sql.query(queryStr, (err, res) => {
