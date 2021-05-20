@@ -42,9 +42,9 @@ Quiz.create = (newQuiz, result) => {
         }
         result(null, res);
     });
-};/* 
-User.remove = (id, result) => {
-    sql.query("DELETE FROM utilizador WHERE idUtilizador=?", [id], (err, res) => {
+}; 
+Quiz.remove = (id, result) => {
+    sql.query("DELETE FROM quiz WHERE idQuiz=?", [id], (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -56,23 +56,5 @@ User.remove = (id, result) => {
         result({ kind: 'not found' }, null); 
     });
 };
-User.updateById = (idUser, user, result) => {
-    let query = 'UPDATE utilizador SET ? WHERE ?';
-
-    let q = sql.query(
-        query,[user, { idUtilizador: idUser}],(err, res) => {
-            //console.log(q.sql); // to check the query string
-
-            if (err) {
-                result(err, null);
-                return;
-            }
-            if (res.affectedRows == 0) {
-                result({ kind: "not_found" }, null);
-                return;
-            }
-            result(null, res);
-        });
-}; */
 // EXPORT MODEL (required by CONTROLLER)
 module.exports = Quiz;

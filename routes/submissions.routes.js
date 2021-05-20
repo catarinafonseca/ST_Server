@@ -1,6 +1,6 @@
 const express = require('express');
 let router = express.Router();
-const quizController = require('../controllers/quizzes.controller');
+const submissionController = require('../controllers/submissions.controller');
 
 router.use((req, res, next) => {
     const start = Date.now();
@@ -10,19 +10,17 @@ router.use((req, res, next) => {
     });
     next()
 })
-
 router.route('/')
-    .get(quizController.findAll)
-    .post(quizController.create)
+    .get(submissionController.findAll)
+    .post(submissionController.create)
 
- router.route('/:quizID')
-    .get(quizController.findOne)
-    .delete(quizController.delete)
-
-
-//send a predefined error message for invalid routes on users
+router.route('/:submissionID')
+    .get(submissionController.findOne)
+    .delete(submissionController.delete)
+    
+//send a predefined error message for invalid routes on activities
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'QUIZZES: what???' });
+    res.status(404).json({ message: 'SUBMISSIONS: what???' });
 })
 // EXPORT ROUTES (required by APP)
 module.exports = router;

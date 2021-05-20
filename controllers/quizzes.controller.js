@@ -53,21 +53,21 @@ exports.create = (req, res) => {
             res.status(201).json({ message: "New quiz created.", location: "/quizzes/" + data.insertId });
         }
     });
-};/*
+};
 exports.delete = (req, res) => {
-    User.remove(req.params.userID, (err, data) => { 
+    Quiz.remove(req.params.quizID, (err, data) => { 
         if (err) {
             if (err.kind === 'not found')
                 res.status(404).json({
-                    message: `Not found user with id ${req.params.userID}.`
+                    message: `Not found quiz with id ${req.params.quizID}.`
                 });
             else
                 res.status(500).json({
-                    message: `Error retrieving user with id ${req.params.userID}.`
+                    message: `Error retrieving quiz with id ${req.params.quizID}.`
                 });
         } else
             res.status(200).json({
-                message: `Deleted with sucess user with id ${req.params.userID}.`
+                message: `Deleted with sucess quiz with id ${req.params.quizID}.`
             });
     }); 
-};*/
+};
