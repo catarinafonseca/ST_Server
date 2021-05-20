@@ -102,43 +102,6 @@ exports.update = (req, res) => {
             res.status(200).json({ message: "Updated activity.", location: `/activities/${req.params.activityID}` });
     });
 };
-const obj = {
-    "title": "",
-    "type": "",
-    "local": "",
-}
-
-// example of how to use a whitelist
-const whitelist = ['title','type','local'];
-
-// set up an empty array to contain the WHERE conditions
-let where = [];
-
-// Iterate over each key / value in the object
-Object.keys(obj).forEach(function (key) {
-    // if the key is not whitelisted, do not use
-    if (!whitelist.includes(key)) {
-        return;
-    }
-    // if the value is an empty string, do not use
-    if ('' === obj[key]) {
-        return;
-    }
-    // if we've made it this far, add the clause to the array of conditions
-    where.push(`\`${key}\` = "${obj[key]}"`);
-});
-
-// convert the where array into a string of AND clauses
-where = where.join(' AND ');
-
-// if there IS a WHERE string, prepend with WHERE keyword
-if (where) {
-    where = `WHERE ${where}`;
-}
-
-const sql = `SELECT * FROM table ${where}`;
-
-console.log(sql);
   // SELECT * FROM table WHERE `a` = "1" AND `c` = "foo"
 /*
 

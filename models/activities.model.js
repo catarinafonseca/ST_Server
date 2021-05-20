@@ -13,13 +13,56 @@ const Activity = function (activity) {
 
 // METHODS
 Activity.getAll = (result) => {
-    sql.query("SELECT * FROM atividade", (err, res) => {
+    const obj = {
+        "nome": "",
+        "type": "",
+        "local": "",
+    }
+
+    // example of how to use a whitelist
+    const whitelist = ['nome', 'type', 'local'];
+
+    // set up an empty array to contain the WHERE conditions
+    let where = [];
+
+    // Iterate over each key / value in the object
+    Object.keys(obj).forEach(function (key) {
+        // if the key is not whitelisted, do not use
+        if (!whitelist.includes(key)) {
+            return;
+        }
+        // if the value is an empty string, do not use
+        if ('' === obj[key]) {
+            return;
+        }
+        // if we've made it this far, add the clause to the array of conditions
+        if (obj[key] === nome) {
+            where.push(`\`${key}\` like "${obj[key]}"`);
+        } else {
+            where.push(`\`${key}\` = "${obj[key]}"`);
+        }
+
+    });
+
+    // convert the where array into a string of AND clauses
+    where = where.join(' AND ');
+
+    // if there IS a WHERE string, prepend with WHERE keyword
+    if (where) {
+        where = `WHERE ${where}`;
+    }
+
+    const queryStr = `SELECT * FROM atividade ${where}`;
+
+    console.log(queryStr);
+    sql.query(queryStr, (err, res) => {
         if (err) {
             result(err, null);
             return;
         }
         result(null, res);
     });
+
 };
 Activity.create = (newActivity, result) => {
     sql.query("INSERT INTO atividade SET ?", newActivity, (err, res) => {
@@ -60,7 +103,7 @@ Activity.updateById = (idActivity, activity, result) => {
     let query = 'UPDATE atividade SET ? WHERE ?';
 
     let q = sql.query(
-        query,[activity, { idAtividade: idActivity }],(err, res) => {
+        query, [activity, { idAtividade: idActivity }], (err, res) => {
             //console.log(q.sql); // to check the query string
 
             if (err) {
