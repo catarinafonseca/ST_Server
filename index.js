@@ -19,6 +19,11 @@ app.use('/activities', require('./routes/activities.routes.js'))
 app.use('/users', require('./routes/users.routes.js'))
 // routing middleware for resource QUIZZES
 app.use('/quizzes', require('./routes/quizzes.routes.js'))
+// routing middleware for resource AUTH
+/* app.use('/auth', require('./routes/auth.routes.js'))
+// routing middleware for resource USER AUTH
+app.use('/userAuth', require('./routes/userAuth.routes.js')) */
+
 
 // handle invalid routes
 app.get('*', function (req, res) {
