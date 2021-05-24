@@ -1,7 +1,7 @@
 const User = require('../models/users.model.js');
 
 exports.findAll = (req, res) => {
-    User.getAll((err, data) => {
+    User.getAll(req.query,(err, data) => {
         if (err)
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Users."

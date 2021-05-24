@@ -12,14 +12,65 @@ const User = function (user) {
 };
 
 // METHODS 
-User.getAll = (result) => {
-    sql.query("SELECT * FROM utilizador", (err, res) => {
-        if (err) {
-            result(err, null);
+User.getAll = (query, result) => {
+    const obj = query
+    //console.log(query);
+    // example of how to use a whitelist
+    const whitelist = ['nome'];
+
+    // set up an empty array to contain the WHERE conditions
+    let where = [];
+    let queryStr = `SELECT * FROM utilizador`;
+
+    // Iterate over each key / value in the object
+    Object.keys(obj).forEach(function (key) {
+        // if the key is not whitelisted, do not use
+        if (!whitelist.includes(key)) {
             return;
         }
-        result(null, res);
+        // if the value is an empty string, do not use
+        if ('' === obj[key]) {
+            return;
+        }
+        //console.log(key);
+        // if we've made it this far, add the clause to the array of conditions
+        if (key === 'nome') {
+            where.push(`\`${key}\` LIKE "%${obj[key]}%"`);
+        }  
+        
+
     });
+
+    // convert the where array into a string of AND clauses
+    where = where.join(' AND ');
+    //console.log(where);
+
+
+    // if there IS a WHERE string, prepend with WHERE keyword
+    if (where) {
+        where = ` WHERE ${where}`;
+         queryStr = queryStr + where
+
+        console.log(queryStr);
+        sql.query(queryStr, (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+            result(null, res);
+        });
+    } else {
+        
+
+        console.log(queryStr);
+        sql.query(queryStr, (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+            result(null, res);
+        });
+    }
 };
 User.findById = (id, result) => {
     sql.query("SELECT * FROM utilizador WHERE idUtilizador=?", [id], (err, res) => {
