@@ -15,7 +15,7 @@ const Activity = function (activity) {
 Activity.getAll = (query,result) => {
     
     const obj = query
-    console.log(query);
+    //console.log(query);
     // example of how to use a whitelist
     const whitelist = ['nome', 'local', 'categoria'];
 
@@ -33,7 +33,7 @@ Activity.getAll = (query,result) => {
         if ('' === obj[key]) {
             return;
         }
-        console.log(key);
+        //console.log(key);
         // if we've made it this far, add the clause to the array of conditions
        
         if (key === 'local') {
@@ -53,7 +53,7 @@ Activity.getAll = (query,result) => {
 
     // convert the where array into a string of AND clauses
     where = where.join(' AND ');
-    console.log(where);
+    //console.log(where);
 
 
     // if there IS a WHERE string, prepend with WHERE keyword
