@@ -17,10 +17,11 @@ Activity.getAll = (query,result) => {
     const obj = query
     console.log(query);
     // example of how to use a whitelist
-    const whitelist = ['nome', 'idLocal', 'idCategoria'];
+    const whitelist = ['nome', 'local', 'categoria'];
 
     // set up an empty array to contain the WHERE conditions
     let where = [];
+    let queryStr = `SELECT * FROM atividade`;
 
     // Iterate over each key / value in the object
     Object.keys(obj).forEach(function (key) {
@@ -32,42 +33,55 @@ Activity.getAll = (query,result) => {
         if ('' === obj[key]) {
             return;
         }
-        console.log(obj[key]);
+        console.log(key);
         // if we've made it this far, add the clause to the array of conditions
        
-        if (obj[key] === 'idLocal') {
-            where.push(`\`${key}\` = "${obj[key]}"`);
-        } 
-        if (obj[key] === 'idCategoria') {
-            where.push(`\`${key}\` = "${obj[key]}"`);
-        }  
-        if (obj[key] === 'nome') {
-            where.push(`\`${key}\` like %${obj[key]}%`);
-        }  
-        else {
-            where.push(`\`${key}\` = "${obj[key]}"`);
+        if (key === 'local') {
+            where.push(` atividade.idLocal = local.idLocal AND local.desc_local = "${obj[key]}"`);
+            queryStr = queryStr + ',local'
         }
+        if (key === 'categoria') {
+            where.push(` atividade.idCategoria = categoria.idCategoria AND categoria.desc_categoria = "${obj[key]}"`);
+            queryStr = queryStr + ',categoria'
+        }  
+        if (key === 'nome') {
+            where.push(`\`${key}\` LIKE "%${obj[key]}%"`);
+        }  
+        
 
     });
 
     // convert the where array into a string of AND clauses
     where = where.join(' AND ');
+    console.log(where);
+
 
     // if there IS a WHERE string, prepend with WHERE keyword
     if (where) {
-        where = `WHERE ${where}`;
+        where = ` WHERE ${where}`;
+         queryStr = queryStr + where
+
+        console.log(queryStr);
+        sql.query(queryStr, (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+            result(null, res);
+        });
+    } else {
+        
+
+        console.log(queryStr);
+        sql.query(queryStr, (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+            result(null, res);
+        });
     }
 
-    const queryStr = `SELECT * FROM atividade  ${where}`;
-
-    console.log(queryStr);
-    sql.query(queryStr, (err, res) => {
-        if (err) {
-            result(err, null);
-            return;
-        }
-        result(null, res);
-    });
 
 };
 Activity.create = (newActivity, result) => {
