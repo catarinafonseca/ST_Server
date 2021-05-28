@@ -25,6 +25,7 @@ exports.findOne = (req, res) => {
             res.status(200).json(data);
     });
 };
+
 exports.create = (req, res) => {
     // Validate request
     if (!req.body || !req.body.nome || !req.body.email || !req.body.idTipo || !req.body.password || !req.body.foto || !req.body.idCurso || !req.body.data_nasc || !req.body.idNivel) {
@@ -34,13 +35,14 @@ exports.create = (req, res) => {
 
     const user = {
         nome: req.body.nome,
-        email: req.body.email,
-        idTipo: req.body.idTipo,
-        password: req.body.password,
-        foto: req.body.foto,
-        idCurso: req.body.idCurso,
-        data_nasc: req.body.data_nasc,
-        idNivel: req.body.idNivel,
+            email: req.body.email,
+            idTipo: 1,
+            password: req.body.password, // generates hash to password
+            foto: req.body.foto,
+            idCurso: req.body.idCurso,
+            data_nasc: req.body.data_nasc,
+            idNivel: req.body.idNivel,
+            pontuacao:100
     };
 
     User.create(user, (err, data) => {

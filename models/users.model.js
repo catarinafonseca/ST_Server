@@ -85,13 +85,26 @@ User.findById = (id, result) => {
         result({ kind: 'not found' }, null);
     });
 };
+User.findByEmail = (email, result) => {
+    sql.query("SELECT * FROM utilizador WHERE email=?", [email], (err, res) => {
+        if (err) {
+            return(err, null);
+        }
+        if (res.length === 0) {
+            result({ kind: "not_found" }, null);
+            return;
+        }
+        result(null, res);
+        return;
+    });
+};
 User.create = (newUser, result) => {
     sql.query("INSERT INTO utilizador SET ?", newUser, (err, res) => {
         if (err) {
             result(err, null);
             return;
         }
-        result(null, res);
+        return(null, res);
     });
 };
 User.remove = (id, result) => {
