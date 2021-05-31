@@ -9,6 +9,7 @@ const Quiz = function (quiz) {
     this.resposta3 = quiz.resposta3;
     this.resposta4 = quiz.resposta4;
     this.resposta_certa = quiz.resposta_certa;
+    this.imagem = quiz.imagem
 };
 
 // METHODS 

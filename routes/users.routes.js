@@ -18,7 +18,7 @@ router.route('/')
 router.route('/:userID')
     .get(userController.findOne)
     .delete(userController.delete)
-    .patch(userController.update);
+    .put(userController.update);
 
 
 //send a predefined error message for invalid routes on users

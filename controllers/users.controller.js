@@ -42,7 +42,7 @@ exports.create = (req, res) => {
             idCurso: req.body.idCurso,
             data_nasc: req.body.data_nasc,
             idNivel: req.body.idNivel,
-            pontuacao:100
+            pontuacao: req.body.pontuacao
     };
 
     User.create(user, (err, data) => {

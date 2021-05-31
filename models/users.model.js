@@ -9,6 +9,7 @@ const User = function (user) {
     this.idCurso = user.idCurso;
     this.data_nasc = user.data_nasc;
     this.idNivel = user.idNivel;
+    this.pontuacao = user.pontuacao;
 };
 
 // METHODS 
