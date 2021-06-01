@@ -1,7 +1,7 @@
 const User = require('../models/users.model.js');
 
 exports.findAll = (req, res) => {
-    User.getAll(req.query,(err, data) => {
+    User.getAll(req.query, (err, data) => {
         if (err)
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Users."
@@ -35,14 +35,14 @@ exports.create = (req, res) => {
 
     const user = {
         nome: req.body.nome,
-            email: req.body.email,
-            idTipo: 1,
-            password: req.body.password, // generates hash to password
-            foto: req.body.foto,
-            idCurso: req.body.idCurso,
-            data_nasc: req.body.data_nasc,
-            idNivel: req.body.idNivel,
-            pontuacao: req.body.pontuacao
+        email: req.body.email,
+        idTipo: 1,
+        password: req.body.password, // generates hash to password
+        foto: req.body.foto,
+        idCurso: req.body.idCurso,
+        data_nasc: req.body.data_nasc,
+        idNivel: req.body.idNivel,
+        pontuacao: req.body.pontuacao
     };
 
     User.create(user, (err, data) => {
@@ -56,7 +56,7 @@ exports.create = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    User.remove(req.params.userID, (err, data) => { 
+    User.remove(req.params.userID, (err, data) => {
         if (err) {
             if (err.kind === 'not found')
                 res.status(404).json({
@@ -70,8 +70,9 @@ exports.delete = (req, res) => {
             res.status(200).json({
                 message: `Deleted with sucess user with id ${req.params.userID}.`
             });
-    }); 
+    });
 };
+
 exports.update = (req, res) => {
     // Validate request
     if (!req.body || !req.body.nome || !req.body.email || !req.body.idCurso || !req.body.data_nasc) {
@@ -95,10 +96,10 @@ exports.update = (req, res) => {
             } else {
                 res.status(500).json({
                     message: "Error updating user with id " + req.params.userID,
-                    
+
                 });
             }
-        } else 
+        } else
             res.status(200).json({ message: "Updated user.", location: `/users/${req.params.userID}` });
     });
 };

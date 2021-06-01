@@ -5,69 +5,78 @@ const config = require("../config/auth.config.js");
 const sql = require("../models/db.js"); 
 const User = require('../models/users.model.js');
 
-exports.signup = (req, res) => {
-    try {// check duplicate username 
-        let user /* = User.findOne(
-            { where: { email: req.body.email} }
-        ); */
-
-        if (user)
-            return res.status(400).json({ message: "Failed! Email is already in use!" });
-            
-            // save User to database
-        user = User.create({
-            nome: req.body.nome,
-            email: req.body.email,
-            idTipo: 1,
-            password: bcrypt.hashSync(req.body.password, 8), // generates hash to password
-            foto: req.body.foto,
-            idCurso: req.body.idCurso,
-            data_nasc: req.body.data_nasc,
-            idNivel: req.body.idNivel,
-            pontuacao:100,
-        });
-        /* if (req.body.role) {
-            let role = await Role.findOne({ where: { name: req.body.role} });
-            if (role)await user.setRole(role);
-        } else
-            await user.setRole(1); // user role = 1 (regular use; not ADMIN)*/
-        return res.json({ message: "User was registered successfully!" }); 
-    }
-    catch (err) {
-        res.status(500).json({ message: err.message});
-    };
-};
-
-exports.signin= async (req, res) => {
+exports.signup = async (req, res) => {
     try {
-        let user = User.findByEmail({ where: { email: req.body.email} });
-        console.log(user);
-        if (!user) 
-            return res.status(404).json({ message: "User Not found." });
-        // tests a string (password in body) against a hash (password in database)
-        const passwordIsValid= bcrypt.compareSync( 
-            req.body.password, user.password
-        );
-        
-        if (!passwordIsValid) {
-            return res.status(401).json({
-                accessToken: null, message: "Invalid Password!"
-            });
+      // check duplicate username
+      await User.findByEmail(req.body.email, (err, data) => {
+        let user = data;
+        if (user)
+          return res
+            .status(400)
+            .json({ message: "Failed! Email is already in use!" });
+  
+        user = User.create({
+          nome: req.body.nome,
+          email: req.body.email,
+          idTipo: 1,
+          password: bcrypt.hashSync(req.body.password, 8), // generates hash to password
+          foto: req.body.foto,
+          idCurso: req.body.idCurso,
+          data_nasc: req.body.data_nasc,
+          idNivel: req.body.idNivel,
+          pontuacao: 100,
+          // save User to database
+        });
+        return res.json({ message: "User was registered successfully!" });
+      });
+      /* if (req.body.role) {
+              let role = await Role.findOne({ where: { name: req.body.role} });
+              if (role)await user.setRole(role);
+          } else
+              await user.setRole(1); // user role = 1 (regular use; not ADMIN)*/
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+  
+  exports.signin = async (req, res) => {
+    try {
+      await User.findByEmail(req.body.email, (err, data) => {
+        console.log(data);
+        let user = data;
+        if (user == null) {
+          return res.status(404).json({ message: "User Not found." });
         }
-        // sign the given payload (user ID) into a JWT payload –builds JWT token,using secret key
-        const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 // 24 hours
+          console.log(req.body.password)
+          const passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            user.password
+          );
+        //const passwordIsValid = req.body.password == user.password ? true : false;
+        if (!passwordIsValid) {
+          return res.status(401).json({
+            accessToken: null,
+            message: "Invalid Password!",
+          });
+        }
+        const token = jwt.sign({ id: user.id }, config.secret, {
+          expiresIn: 86400, // 24 hours
         });
-        
-        
         return res.status(200).json({
-            id: user.id, 
-            nome: user.nome,
-            email: user.email,
-            
+          id: user.idUtilizador,
+          nome: user.nome,
+          email: user.email,
+          token: token,
         });
-    } 
-    catch (err) { res.status(500).json({ message: err.message}); console.log(err);};
-};
+      });
+  
+      // sign the given payload (user ID) into a JWT payload –builds JWT token,using secret key
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+      console.log(err);
+    }
+  };
+
 
 exports.verifyToken= (req, res, next) => {
     let token = req.headers["x-access-token"];

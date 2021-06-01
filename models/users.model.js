@@ -87,16 +87,23 @@ User.findById = (id, result) => {
     });
 };
 User.findByEmail = (email, result) => {
+    console.log(email);
     sql.query("SELECT * FROM utilizador WHERE email=?", [email], (err, res) => {
+
         if (err) {
-            return(err, null);
-        }
-        if (res.length === 0) {
-            result({ kind: "not_found" }, null);
+            result(err, null)
             return;
         }
-        result(null, res);
-        return;
+        if (res.length) {
+            result(null, res[0]);
+            /* result({ kind: "not_found" }, null); */
+            return;
+        }
+        //console.log(res);
+        //result(null, res);
+        //return(null, res);
+        result({ kind: "not_found" }, null);
+        return
     });
 };
 User.create = (newUser, result) => {
