@@ -1,4 +1,4 @@
-const sql = require("./db.js"); 
+const sql = require("./db.js");
 
 const User = function (user) {
     this.nome = user.nome;
@@ -10,14 +10,13 @@ const User = function (user) {
     this.data_nasc = user.data_nasc;
     this.idNivel = user.idNivel;
     this.pontuacao = user.pontuacao;
-    //this.blocked=user.blocked
+    this.blocked = user.blocked
 };
 
 // METHODS 
 User.getAll = (query, result) => {
     const obj = query
-    //console.log(query);
-    // example of how to use a whitelist
+
     const whitelist = ['nome'];
 
     // set up an empty array to contain the WHERE conditions
@@ -34,26 +33,19 @@ User.getAll = (query, result) => {
         if ('' === obj[key]) {
             return;
         }
-        //console.log(key);
         // if we've made it this far, add the clause to the array of conditions
         if (key === 'nome') {
             where.push(`\`${key}\` LIKE "%${obj[key]}%"`);
-        }  
-        
-
+        }
     });
 
     // convert the where array into a string of AND clauses
     where = where.join(' AND ');
-    //console.log(where);
-
 
     // if there IS a WHERE string, prepend with WHERE keyword
     if (where) {
         where = ` WHERE ${where}`;
-         queryStr = queryStr + where
-
-        console.log(queryStr);
+        queryStr = queryStr + where
         sql.query(queryStr, (err, res) => {
             if (err) {
                 result(err, null);
@@ -62,9 +54,6 @@ User.getAll = (query, result) => {
             result(null, res);
         });
     } else {
-        
-
-        console.log(queryStr);
         sql.query(queryStr, (err, res) => {
             if (err) {
                 result(err, null);
@@ -109,7 +98,7 @@ User.create = (newUser, result) => {
             result(err, null);
             return;
         }
-        return(null, res);
+        return (null, res);
     });
 };
 User.remove = (id, result) => {
@@ -122,16 +111,15 @@ User.remove = (id, result) => {
             result(null, res[0]);
             return
         }
-        result({ kind: 'not found' }, null); 
+        result({ kind: 'not found' }, null);
     });
 };
 User.updateById = (idUser, user, result) => {
     let query = 'UPDATE utilizador SET ? WHERE ?';
 
     let q = sql.query(
-        query,[user, { idUtilizador: idUser}],(err, res) => {
-            //console.log(q.sql); // to check the query string
-
+        query, [user, { idUtilizador: idUser }], (err, res) => {
+            
             if (err) {
                 result(err, null);
                 return;

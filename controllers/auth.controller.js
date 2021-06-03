@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
         data_nasc: req.body.data_nasc,
         idNivel: 1,
         pontuacao: 100,
-        //blocked:false
+        blocked:false
       });
       return res.json({ message: "User was registered successfully!" });
     });

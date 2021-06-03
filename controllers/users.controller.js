@@ -25,36 +25,6 @@ exports.findOne = (req, res) => {
             res.status(200).json(data);
     });
 };
-
-exports.create = (req, res) => {
-    // Validate request
-    if (!req.body || !req.body.nome || !req.body.email || !req.body.idTipo || !req.body.password || !req.body.foto || !req.body.idCurso || !req.body.data_nasc || !req.body.idNivel) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
-
-    const user = {
-        nome: req.body.nome,
-        email: req.body.email,
-        idTipo: 1,
-        password: req.body.password, // generates hash to password
-        foto: req.body.foto,
-        idCurso: req.body.idCurso,
-        data_nasc: req.body.data_nasc,
-        idNivel: req.body.idNivel,
-        pontuacao: req.body.pontuacao
-    };
-
-    User.create(user, (err, data) => {
-        if (err)
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating this user."
-            });
-        else {
-            res.status(201).json({ message: "New user created.", location: "/users/" + data.insertId });
-        }
-    });
-};
 exports.delete = (req, res) => {
     User.remove(req.params.userID, (err, data) => {
         if (err) {
@@ -72,7 +42,6 @@ exports.delete = (req, res) => {
             });
     });
 };
-
 exports.update = (req, res) => {
     // Validate request
     if (!req.body || !req.body.nome || !req.body.email || !req.body.idCurso || !req.body.data_nasc) {
