@@ -43,6 +43,14 @@ exports.delete = (req, res) => {
     });
 };
 exports.create = (req, res) => {
+    
+    // Validate request
+    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem
+        || !req.body.certificado_SN || !req.body.data_hora || !req.body.idLocal || !req.body.idCategoria) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
+
     const activity = {
         nome: req.body.nome,
         desc_atividade: req.body.desc_atividade,
@@ -51,13 +59,9 @@ exports.create = (req, res) => {
         certificado_SN: req.body.certificado_SN,
         data_hora: req.body.data_hora,
         idLocal: req.body.idLocal,
-        idCategoria: req.body.idCategoria
+        idCategoria: req.body.idCategoria,
+        concluded: false
     };
-    // Validate request
-    if (!req.body || !activity) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
 
     Activity.create(activity, (err, data) => {
         if (err)

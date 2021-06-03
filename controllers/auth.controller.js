@@ -9,6 +9,10 @@ exports.signup = async (req, res) => {
     try {
       // check duplicate username
       await User.findByEmail(req.body.email, (err, data) => {
+        if (!req.body || !req.body.nome || !req.body.email || !req.body.password || !req.body.foto || !req.body.idCurso || !req.body.data_nasc) {
+          res.status(400).json({ message: "Please check if all variables are filled!" });
+          return;
+        }
         let user = data;
         if (user)
           return res
@@ -23,7 +27,7 @@ exports.signup = async (req, res) => {
           foto: req.body.foto,
           idCurso: req.body.idCurso,
           data_nasc: req.body.data_nasc,
-          idNivel: req.body.idNivel,
+          idNivel: 1,
           pontuacao: 100,
           // save User to database
         });
@@ -41,8 +45,13 @@ exports.signup = async (req, res) => {
   
   exports.signin = async (req, res) => {
     try {
+      if (!req.body || !req.body.email || !req.body.password) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+      }
       await User.findByEmail(req.body.email, (err, data) => {
         console.log(data);
+        
         let user = data;
         if (user == null) {
           return res.status(404).json({ message: "User Not found." });
