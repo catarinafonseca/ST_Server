@@ -1,6 +1,6 @@
 const express = require('express');
 const authController= require("../controllers/auth.controller");
-const userController= require("../controllers/userAuth.controller");
+const userController= require("../controllers/users.controller");
 let router = express.Router();
 
 router.use((req, res, next) => {
@@ -9,10 +9,10 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(authController.verifyToken, authController.isAdmin, userController.getAllUsers);
+    .get(authController.verifyToken, authController.isAdmin, userController.findAll);
     
-router.route('/:userID')
-    .get(authController.verifyToken,  authController.isAdminOrLoggedUser, userController.getUser);
+/* router.route('/:userID')
+    .get(authController.verifyToken,  authController.isAdminOrLoggedUser, userController.getUser); */
     
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'AUTHENTICATION: what???' });

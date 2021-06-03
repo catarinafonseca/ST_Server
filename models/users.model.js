@@ -10,6 +10,7 @@ const User = function (user) {
     this.data_nasc = user.data_nasc;
     this.idNivel = user.idNivel;
     this.pontuacao = user.pontuacao;
+    //this.blocked=user.blocked
 };
 
 // METHODS 
@@ -96,12 +97,8 @@ User.findByEmail = (email, result) => {
         }
         if (res.length) {
             result(null, res[0]);
-            /* result({ kind: "not_found" }, null); */
             return;
         }
-        //console.log(res);
-        //result(null, res);
-        //return(null, res);
         result({ kind: "not_found" }, null);
         return
     });

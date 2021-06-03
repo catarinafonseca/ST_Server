@@ -13,7 +13,6 @@ router.use((req, res, next) => {
 
 router.route('/')
     .get(userController.findAll)
-    .post(userController.create)
 
 router.route('/:userID')
     .get(userController.findOne)
