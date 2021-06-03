@@ -9,6 +9,7 @@ const Activity = function (activity) {
     this.data_hora = activity.data_hora;
     this.idLocal = activity.idLocal;
     this.idCategoria = activity.idCategoria;
+    this.concluded = activity.concluded;
 };
 
 // METHODS

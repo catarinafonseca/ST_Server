@@ -28,10 +28,16 @@ exports.findOne = (req, res) => {
 exports.create = (req, res) => {
     // Validate request
     if (!req.body || !req.body.tema || !req.body.desc_quiz || !req.body.pergunta || !req.body.resposta1 
-        || !req.body.resposta2 || !req.body.resposta3 || !req.body.resposta4 || !req.body.resposta_certa) {
+        || !req.body.resposta2 || !req.body.resposta3 || !req.body.resposta4 || !req.body.resposta_certa || !req.body.imagem) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
         return;
     }
+
+    if (req.body.resposta1 != req.body.resposta_certa && req.body.resposta2 != req.body.resposta_certa 
+        && req.body.resposta3 != req.body.resposta_certa && req.body.resposta4 != req.body.resposta_certa) {
+        res.status(400).json({ message: "No match between the 4 answers and the right answer." });
+        return;
+    }    
 
     const quiz = {
         tema: req.body.tema,
@@ -43,6 +49,8 @@ exports.create = (req, res) => {
         resposta4: req.body.resposta4,
         resposta_certa: req.body.resposta_certa,
     };
+    
+    
 
     Quiz.create(quiz, (err, data) => {
         if (err)
