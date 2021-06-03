@@ -13,7 +13,6 @@ router.route('/signup')
 router.route('/signin')
     .post(authController.signin)
 
-
 router.all('*', function (req, res) {   
     //send an predefined error message 
     res.status(404).json({ message: 'AUTHENTICATION: what???' });

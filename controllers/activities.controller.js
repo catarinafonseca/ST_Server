@@ -1,7 +1,7 @@
 const Activity = require('../models/activities.model.js');
 
 exports.findAll = (req, res) => {
-    Activity.getAll(req.query,(err, data) => {
+    Activity.getAll(req.query, (err, data) => {
         if (err)
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Activities."
@@ -43,14 +43,46 @@ exports.delete = (req, res) => {
     });
 };
 exports.create = (req, res) => {
-    
+    Activity.findById(req.body.nome, (err, data) => {
+        const activity = {
+            nome: req.body.nome,
+            desc_atividade: req.body.desc_atividade,
+            num_participantes: req.body.num_participantes,
+            imagem: req.body.imagem,
+            certificado_SN: req.body.certificado_SN,
+            data_hora: req.body.data_hora,
+            idLocal: req.body.idLocal,
+            idCategoria: req.body.idCategoria,
+            concluida: "false"
+        };
+        let user = data;
+        if (!req.body || !activity) {
+            res.status(400).json({ message: "Please check if all variables are filled!" });
+            return;
+        }
+        if (activity)
+            return res
+                .status(400)
+                .json({ message: "Failed! Name is already in use!" });
+
+        Activity.create(activity, (err, data) => {
+            if (err)
+                res.status(500).json({
+                    message: err.message || "Some error occurred while creating the Activity."
+                });
+            else {
+                res.status(201).json({ message: "New activity created.", location: "/activities/" + data.insertId });
+            }
+        });
+    });
+};
+exports.update = (req, res) => {
+
     // Validate request
-    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem
-        || !req.body.certificado_SN || !req.body.data_hora || !req.body.idLocal || !req.body.idCategoria) {
+    if (!req.body || !activity) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
         return;
     }
-
     const activity = {
         nome: req.body.nome,
         desc_atividade: req.body.desc_atividade,
@@ -60,36 +92,8 @@ exports.create = (req, res) => {
         data_hora: req.body.data_hora,
         idLocal: req.body.idLocal,
         idCategoria: req.body.idCategoria,
-        concluded: false
+        concluida: req.body.concluida
     };
-
-    Activity.create(activity, (err, data) => {
-        if (err)
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating the Activity."
-            });
-        else {
-            res.status(201).json({ message: "New activity created.", location: "/activities/" + data.insertId });
-        }
-    });
-};
-exports.update = (req, res) => {
-    const activity = {
-        nome: req.body.nome,
-        desc_atividade: req.body.desc_atividade,
-        num_participantes: req.body.num_participantes,
-        imagem: req.body.imagem,
-        certificado_SN: req.body.certificado_SN,
-        data_hora: req.body.data_hora,
-        idLocal: req.body.idLocal,
-        idCategoria: req.body.idCategoria
-    };
-    // Validate request
-    if (!req.body || !activity) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
-
     Activity.updateById(req.params.activityID, activity, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
@@ -98,62 +102,21 @@ exports.update = (req, res) => {
                 });
             } else {
                 res.status(500).json({
-                    message: "Error updating activity with id " + req.params.activityID,
-
+                    message: `Error updating activity with id ${req.params.activityID}.`
                 });
             }
         } else
             res.status(200).json({ message: "Updated activity.", location: `/activities/${req.params.activityID}` });
     });
 };
-  // SELECT * FROM table WHERE `a` = "1" AND `c` = "foo"
-/*
-
-
-exports.findFilters = (req, res) => {
-    Activity.findByType(req.params.type, (err, data) => {
-        console.log(req.params.typ);
-        if (err) {
-            if (err.kind === 'not found')
-                res.status(404).json({
-                    message: `Not found Activity with id ${req.params.activityID}.`
-                });
-            else
-                res.status(500).json({
-                    message: `Error retrieving Activity with id ${req.params.activityID}.`
-                });
-        } else
-            res.status(200).json(data);
-    });
-    const {
-        text,
-        local,
-        type
-    } = req.query;
-    let condition = type ? {
-        text: {
-            [Op.like]: `%${type}%`
-        }
-    } : null;
-    condition += local ? {
-        local: {
-            [Op.like]: `%${local}%`
-        }
-    } : null;
-    condition += text ? {
-        type: {
-            [Op.like]: `%${text}%`
-        }
-    } : null;
-    Activity.findAndCountAll({
-        where: condition
-    })
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(err => {
+exports.findAllConcluded = (req, res) => {
+    Activity.getAllConcluded((err, data) => {
+        if (err)
             res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
+                message: err.message || "Some error occurred while retrieving activities."
             });
-        })
-};*/
+        else {
+            res.status(200).json(data);
+        }
+    });
+};

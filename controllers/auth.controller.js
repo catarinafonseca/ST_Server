@@ -8,7 +8,7 @@ const User = require('../models/users.model.js');
 exports.signup = async (req, res) => {
   try {
     // check duplicate email
-    await User.findByEmail(req.body.email, (err, data) => {
+    await User.findById(req.body.email, (err, data) => {
       let user = data;
       if (!req.body || !req.body.nome || !req.body.email || !req.body.password || !req.body.foto || !req.body.idCurso || !req.body.data_nasc) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
@@ -18,7 +18,7 @@ exports.signup = async (req, res) => {
         return res
           .status(400)
           .json({ message: "Failed! Email is already in use!" });
-      
+
       user = User.create({
         nome: req.body.nome,
         email: req.body.email,
@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
         data_nasc: req.body.data_nasc,
         idNivel: 1,
         pontuacao: 100,
-        blocked:false
+        blocked: "false"
       });
       return res.json({ message: "User was registered successfully!" });
     });
@@ -42,7 +42,6 @@ exports.signup = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 exports.signin = async (req, res) => {
   try {
     await User.findByEmail(req.body.email, (err, data) => {
@@ -81,8 +80,6 @@ exports.signin = async (req, res) => {
     console.log(err);
   }
 };
-
-
 exports.verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
 
@@ -90,7 +87,7 @@ exports.verifyToken = (req, res, next) => {
     return res.status(403).send({
       message: "No token provided!"
     });
-  }// verify request token given the JWT secret key
+  }
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
@@ -100,13 +97,11 @@ exports.verifyToken = (req, res, next) => {
     next();
   });
 };
-
 exports.isAdmin = async (req, res, next) => {
   let user = await User.findById(req.loggedUserId);
-  let role = await User.findById(req.idTipo);
-
-  if (role === 3)
+console.log(user);
+  /* if (user.idTipo === 3)
     next();
-  console.log(role)
+  console.log(req.idTipo) */
   return res.status(403).send({ message: "Require Admin Role!" });
 };

@@ -43,17 +43,9 @@ exports.delete = (req, res) => {
     });
 };
 exports.update = (req, res) => {
-    // Validate request
-    if (!req.body || !req.body.nome || !req.body.email || !req.body.idCurso || !req.body.data_nasc) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
-
     const user = {
-        nome: req.body.nome,
-        email: req.body.email,
-        idCurso: req.body.idCurso,
-        data_nasc: req.body.data_nasc,
+        password: req.body.password,
+        imagem: req.body.imagem
     };
 
     User.updateById(req.params.userID, user, (err, data) => {
@@ -64,8 +56,28 @@ exports.update = (req, res) => {
                 });
             } else {
                 res.status(500).json({
-                    message: "Error updating user with id " + req.params.userID,
+                    message: `Error updating user with id ${req.params.userID}.`
+                });
+            }
+        } else
+            res.status(200).json({ message: "Updated user.", location: `/users/${req.params.userID}` });
+    });
+};
+exports.blockOrPromote = (req, res) => {
+    const user = {
+        blocked: req.body.blocked,
+        idTipo: req.body.idTipo
+    };
 
+    User.updateById(req.params.userID, user, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).json({
+                    message: `Not found user with id ${req.params.userID}.`
+                });
+            } else {
+                res.status(500).json({
+                    message: `Error updating user with id ${req.params.userID}.`
                 });
             }
         } else

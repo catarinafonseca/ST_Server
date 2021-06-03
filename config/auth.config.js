@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "chave"
+    secret: "x-access-token"
 }

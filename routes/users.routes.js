@@ -17,8 +17,8 @@ router.route('/')
 router.route('/:userID')
     .get(userController.findOne)
     .delete(userController.delete)
-    .put(userController.update);
-
+    .put(userController.update)
+    .patch(userController.blockOrPromote);
 
 //send a predefined error message for invalid routes on users
 router.all('*', function (req, res) {

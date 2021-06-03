@@ -77,7 +77,6 @@ User.findById = (id, result) => {
     });
 };
 User.findByEmail = (email, result) => {
-    console.log(email);
     sql.query("SELECT * FROM utilizador WHERE email=?", [email], (err, res) => {
 
         if (err) {

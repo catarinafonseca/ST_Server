@@ -27,8 +27,7 @@ exports.findOne = (req, res) => {
 };
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body || !req.body.tema || !req.body.desc_quiz || !req.body.pergunta || !req.body.resposta1 
-        || !req.body.resposta2 || !req.body.resposta3 || !req.body.resposta4 || !req.body.resposta_certa || !req.body.imagem) {
+    if (!req.body || !quiz) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
         return;
     }
@@ -48,9 +47,8 @@ exports.create = (req, res) => {
         resposta3: req.body.resposta3,
         resposta4: req.body.resposta4,
         resposta_certa: req.body.resposta_certa,
+        imagem: req.body.imagem
     };
-    
-    
 
     Quiz.create(quiz, (err, data) => {
         if (err)

@@ -19,7 +19,6 @@ router.route('/')
     .get(quizController.findOne)
     .delete(quizController.delete)
 
-
 //send a predefined error message for invalid routes on users
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'QUIZZES: what???' });

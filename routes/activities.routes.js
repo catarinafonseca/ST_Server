@@ -14,14 +14,13 @@ router.route('/')
     .get(activityController.findAll)
     .post(activityController.create)
 
+router.route('/concluded')
+    .get(activityController.findAllConcluded)
+
 router.route('/:activityID')
     .get(activityController.findOne)
     .delete(activityController.delete)
     .put(activityController.update);
-    
-/* router.route('/activities?type={tipo}')
-    .get(activityController.findFilters) */
-//router.route('/activities?type={tipo}&local={local}&text={searchText}')
 
 //send a predefined error message for invalid routes on activities
 router.all('*', function (req, res) {
