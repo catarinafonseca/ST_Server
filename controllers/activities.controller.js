@@ -65,23 +65,27 @@ exports.create = (req, res) => {
             res.status(400).json({ message: "Please check if all variables are filled!" });
             return;
         }
-        console.log(activity.nome);
-        if (activity.nome===req.body.nome) {
-            return res
-                .status(400)
-                .json({ message: "Failed! Name is already in use!" });
-        }
-
-        console.log(req.body.nome);
-        Activity.create(activity, (err, data) => {
-            if (err)
-                res.status(500).json({
-                    message: err.message || "Some error occurred while creating the Activity."
-                });
-            else {
-                res.status(201).json({ message: "New activity created.", location: "/activities/" + data.insertId });
-            }
+        Activity.findByName(activity.nome, (err, data) => {
+            if (err) {
+                if (err.kind === 'not found'){
+                    Activity.create(activity, (err, data) => {
+                        if (err)
+                            res.status(500).json({
+                                message: err.message || "Some error occurred while creating the Activity."
+                            });
+                        else {
+                            res.status(201).json({ message: "New activity created.", id: data.insertId, location: "/activities/" + data.insertId });
+                        }
+                    });
+                } 
+                else
+                    res.status(500).json({
+                        message: `Some Error Occurred!`
+                    });
+            } else
+                res.status(400).json({ message: "Failed! Activity is already registered!" });
         });
+        
     });
 };
 exports.update = (req, res) => {

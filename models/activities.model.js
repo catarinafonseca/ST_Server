@@ -90,6 +90,19 @@ Activity.findById = (id, result) => {
         result({ kind: 'not found' }, null);
     });
 };
+Activity.findByName = (nome, result) => {
+    sql.query("SELECT * FROM atividade WHERE nome=?", [nome], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        if (res.length) {
+            result(null, res[0]);
+            return
+        }
+        result({ kind: 'not found' }, null);
+    });
+};
 Activity.remove = (id, result) => {
     sql.query("DELETE FROM atividade WHERE idAtividade=?", [id], (err, res) => {
         if (err) {
