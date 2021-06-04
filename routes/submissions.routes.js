@@ -12,7 +12,14 @@ router.use((req, res, next) => {
 })
 router.route('/')
     .get(submissionController.findAll)
-    .post(submissionController.create)
+
+router.route('/activities')
+    .get(submissionController.findAllActivities)
+    .post(submissionController.createActivity)
+
+router.route('/quizzes')
+    .get(submissionController.findAllQuizzes)
+    .post(submissionController.createQuiz)
 
 router.route('/:submissionID')
     .get(submissionController.findOne)

@@ -10,6 +10,26 @@ exports.findAll = (req, res) => {
             res.status(200).json(data);
     });
 };
+exports.findAllActivities = (req, res) => {
+    Submission.getAllActivities((err, data) => {
+        if (err)
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving Submissions."
+            });
+        else
+            res.status(200).json(data);
+    });
+};
+exports.findAllQuizzes = (req, res) => {
+    Submission.getAllQuizzes((err, data) => {
+        if (err)
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving Submissions."
+            });
+        else
+            res.status(200).json(data);
+    });
+};
 exports.findOne = (req, res) => {
     Submission.findById(req.params.submissionID, (err, data) => {
         if (err) {
@@ -25,7 +45,7 @@ exports.findOne = (req, res) => {
             res.status(200).json(data);
     });
 };
-exports.create = (req, res) => {
+exports.createActivity = (req, res) => {
     // Validate request
     if (!req.body || !req.body.idUtilizador || !req.body.idAtividade || !req.body.data_hora) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
@@ -37,6 +57,28 @@ exports.create = (req, res) => {
         idAtividade: req.body.idAtividade,
         data_hora: req.body.data_hora,
     };
+
+    Submission.create(submission, (err, data) => {
+        if (err)
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating this submission."
+            });
+        else {
+            res.status(201).json({ message: "New submission created.", location: "/submissions/" + data.insertId });
+        }
+    });
+};
+exports.createQuiz = (req, res) => {
+    const submission = {
+        idUtilizador: req.body.idUtilizador,
+        idQuiz: req.body.idQuiz,
+        data_hora: req.body.data_hora,
+    };
+    // Validate request
+    if (!req.body || !submission) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
 
     Submission.create(submission, (err, data) => {
         if (err)

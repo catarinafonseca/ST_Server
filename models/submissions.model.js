@@ -29,6 +29,28 @@ Submission.findById = (id, result) => {
         result({ kind: 'not found' }, null);
     });
 };
+Submission.getAllActivities = result => {
+    sql.query("SELECT * FROM historico WHERE idQuiz IS NULL" ,(err, res) => {
+        
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+        console.log(result);
+    });
+}
+Submission.getAllQuizzes = result => {
+    sql.query("SELECT * FROM historico WHERE idAtividade IS NULL" ,(err, res) => {
+        
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+        console.log(result);
+    });
+}
 Submission.create = (newSubmission, result) => {
     sql.query("INSERT INTO historico SET ?", newSubmission, (err, res) => {
         if (err) {
@@ -48,7 +70,7 @@ Submission.remove = (id, result) => {
             result(null, res[0]);
             return
         }
-        result({ kind: 'not found' }, null); 
+        result({ kind: 'not found' }, null);
     });
 };
 
