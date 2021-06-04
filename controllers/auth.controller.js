@@ -46,14 +46,14 @@ exports.signin = async (req, res) => {
   try {
     await User.findByEmail(req.body.email, (err, data) => {
       console.log(data);
-      let user = data;
-      if (user == null) {
+      /* let user = data; */
+      if (data == null) {
         return res.status(404).json({ message: "User Not found." });
       }
       console.log(req.body.password)
       const passwordIsValid = bcrypt.compareSync(
         req.body.password,
-        user.password
+        data.password
       );
       //const passwordIsValid = req.body.password == user.password ? true : false;
       if (!passwordIsValid) {
@@ -62,14 +62,14 @@ exports.signin = async (req, res) => {
           message: "Invalid Password!",
         });
       }
-      const token = jwt.sign({ id: user.id}, config.secret, {
+      const token = jwt.sign({ idUtilizador: data.idUtilizador }, config.secret, {
         expiresIn: 86400, // 24 hours
       });
       return res.status(200).json({
-        id: user.idUtilizador,
-        nome: user.nome,
-        email: user.email,
-        idTipo: user.idTipo,
+        idUtilizador: data.idUtilizador,
+        nome: data.nome,
+        email: data.email,
+        idTipo: data.idTipo,
         token: token,
       });
     });
@@ -93,15 +93,18 @@ exports.verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }
-    req.loggedUserId = decoded.id; // save user ID for future verifications
+    req.loggedUserId = decoded.idUtilizador; // save user ID for future verifications
     next();
+    console.log(decoded);
+    /* console.log(req.loggedUserId); */
   });
 };
-exports.isAdmin = async (req, res/* , next */) => {
-  let user = await User.findById(req.loggedUserId);
-console.log("batata"+req.loggedUserId);
-  /* if (user.idTipo === 3)
+exports.isAdmin = async (req, res, next) => {
+  await User.findById(req.loggedUserId, (err, data) => {
+    console.log(data);
+    if (data.idTipo !== 3) {
+      return res.status(403).send({ message: "Require Admin Role!" });
+    }
     next();
-  console.log(req.idTipo) */
-  return res.status(403).send({ message: "Require Admin Role!" });
+  })
 };

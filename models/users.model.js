@@ -37,8 +37,9 @@ User.getAll = (query, result) => {
         if (key === 'nome') {
             where.push(`\`${key}\` LIKE "%${obj[key]}%"`);
         }
-    });
 
+    });
+     where.push('idTipo != 3')
     // convert the where array into a string of AND clauses
     where = where.join(' AND ');
 
@@ -74,7 +75,6 @@ User.findById = (id, result) => {
             return
         }
         result({ kind: 'not found' }, null);
-        return
     });
 };
 User.findByEmail = (email, result) => {
@@ -119,7 +119,7 @@ User.updateById = (idUser, user, result) => {
 
     let q = sql.query(
         query, [user, { idUtilizador: idUser }], (err, res) => {
-            
+
             if (err) {
                 result(err, null);
                 return;
