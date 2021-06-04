@@ -8,7 +8,7 @@ const User = require('../models/users.model.js');
 exports.signup = async (req, res) => {
   try {
     // check duplicate email
-    await User.findById(req.body.email, (err, data) => {
+    await User.findByEmail(req.body.email, (err, data) => {
       let user = data;
       if (!req.body || !req.body.nome || !req.body.email || !req.body.password || !req.body.foto || !req.body.idCurso || !req.body.data_nasc) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
@@ -33,11 +33,6 @@ exports.signup = async (req, res) => {
       });
       return res.json({ message: "User was registered successfully!" });
     });
-    /* if (req.body.role) {
-            let role = await Role.findOne({ where: { name: req.body.role} });
-            if (role)await user.setRole(role);
-        } else
-            await user.setRole(1); // user role = 1 (regular use; not ADMIN)*/
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
