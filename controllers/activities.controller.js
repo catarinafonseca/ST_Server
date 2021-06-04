@@ -3,9 +3,14 @@ const Activity = require('../models/activities.model.js');
 exports.findAll = (req, res) => {
     Activity.getAll(req.query, (err, data) => {
         if (err)
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Activities."
-            });
+            if (err.kind === 'not found')
+                res.status(404).json({
+                    message: `Not found Activities.`
+                });
+            else
+                res.status(500).send({
+                    message: err.message || "Some error occurred while retrieving Activities."
+                });
         else
             res.status(200).json(data);
     });
@@ -44,7 +49,8 @@ exports.delete = (req, res) => {
 };
 exports.create = (req, res) => {
     Activity.findById(req.body.nome, (err, data) => {
-        const activity = {
+        
+        let activity = {
             nome: req.body.nome,
             desc_atividade: req.body.desc_atividade,
             num_participantes: req.body.num_participantes,

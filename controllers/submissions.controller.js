@@ -57,16 +57,23 @@ exports.createActivity = (req, res) => {
         idAtividade: req.body.idAtividade,
         data_hora: req.body.data_hora,
     };
-
-    Submission.create(submission, (err, data) => {
-        if (err)
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating this submission."
+    Submission.findBySubmission(submission.idUtilizador, submission.idAtividade, (err,data)=>{
+        if(err){
+            Submission.create(submission, (err, data) => {
+                if (err)
+                    res.status(500).json({
+                        message: err.message || "Some error occurred while creating this submission."
+                    });
+                else {
+                    res.status(201).json({ message: "New submission created.", location: "/submissions/" + data.insertId });
+                }
             });
-        else {
-            res.status(201).json({ message: "New submission created.", location: "/submissions/" + data.insertId });
+        }else{
+            res.status(400).json({
+                message: "Submission already created."
+            });
         }
-    });
+    })
 };
 exports.createQuiz = (req, res) => {
     const submission = {
@@ -91,19 +98,19 @@ exports.createQuiz = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    Submission.remove(req.params.submissionID, (err, data) => { 
+    Submission.remove(req.params.submissionID, (err, data) => {
         if (err) {
             if (err.kind === 'not found')
                 res.status(404).json({
-                    message: `Not found user with id ${req.params.submissionID}.`
+                    message: `Not found submission with id ${req.params.submissionID}.`
                 });
             else
                 res.status(500).json({
-                    message: `Error retrieving user with id ${req.params.submissionID}.`
+                    message: `Error retrieving submission with id ${req.params.submissionID}.`
                 });
         } else
             res.status(200).json({
-                message: `Deleted with sucess user with id ${req.params.submissionID}.`
+                message: `Deleted with sucess submission with id ${req.params.submissionID}.`
             });
-    }); 
+    });
 };
