@@ -9,7 +9,7 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(authController.verifyToken, authController.isAdmin, userController.findAll);
+    .get(authController.verifyToken, authController.isProfessor, userController.findAll);
     
 /* router.route('/:userID')
     .get(authController.verifyToken,  authController.isAdminOrLoggedUser, userController.getUser); */

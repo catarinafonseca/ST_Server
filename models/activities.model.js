@@ -37,7 +37,7 @@ Activity.getAll = (query, result) => {
             queryStr = queryStr + ',local'
         }
         if (key === 'categoria') {
-            where.push(` atividade.idCategoria = categoria.idCategoria AND categoria.desc_categoria = "${obj[key]}"`);
+            where.push(` atividade.idCategoria = categoria.idCategoria AND categoria.desc_categoria LIKE "%${obj[key]}%"`);
             queryStr = queryStr + ',categoria'
         }
         if (key === 'nome') {
@@ -66,7 +66,7 @@ Activity.getAll = (query, result) => {
             }
             result(null, res);
         });
-    }
+    } 
 };
 Activity.create = (newActivity, result) => {
     sql.query("INSERT INTO atividade SET ?", newActivity, (err, res) => {

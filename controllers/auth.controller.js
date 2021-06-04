@@ -95,8 +95,6 @@ exports.verifyToken = (req, res, next) => {
     }
     req.loggedUserId = decoded.idUtilizador; // save user ID for future verifications
     next();
-    console.log(decoded);
-    /* console.log(req.loggedUserId); */
   });
 };
 exports.isAdmin = async (req, res, next) => {
@@ -104,6 +102,24 @@ exports.isAdmin = async (req, res, next) => {
     console.log(data);
     if (data.idTipo !== 3) {
       return res.status(403).send({ message: "Require Admin Role!" });
+    }
+    next();
+  })
+};
+exports.isProfessor = async (req, res, next) => {
+  await User.findById(req.loggedUserId, (err, data) => {
+    console.log(data);
+    if (data.idTipo !== 2) {
+      return res.status(403).send({ message: "Require Professor Role!" });
+    }
+    next();
+  })
+};
+exports.isAdminOrLoggedUser= async (req, res, next) => {
+  await User.findById(req.loggedUserId, (err, data) => {
+    console.log(data);
+    if (data.idTipo !== 3 || data.idUtilizador == req.params.idUtilizador) {
+      return res.status(403).send({ message: "Require Admin Role or Student login!" });
     }
     next();
   })

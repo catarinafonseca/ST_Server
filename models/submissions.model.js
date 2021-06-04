@@ -29,9 +29,22 @@ Submission.findById = (id, result) => {
         result({ kind: 'not found' }, null);
     });
 };
+Submission.findBySubmission = (idUtilizador, idAtividade, result) => {
+    sql.query("SELECT * FROM historico WHERE idUtilizador=? AND idAtividade=?", [idUtilizador, idAtividade], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        if (res.length) {
+            result(null, res[0]);
+            return
+        }
+        result({ kind: 'not found' }, null);
+    });
+};
 Submission.getAllActivities = result => {
-    sql.query("SELECT * FROM historico WHERE idQuiz IS NULL" ,(err, res) => {
-        
+    sql.query("SELECT * FROM historico WHERE idQuiz IS NULL", (err, res) => {
+
         if (err) {
             result(err, null);
             return;
@@ -41,8 +54,8 @@ Submission.getAllActivities = result => {
     });
 }
 Submission.getAllQuizzes = result => {
-    sql.query("SELECT * FROM historico WHERE idAtividade IS NULL" ,(err, res) => {
-        
+    sql.query("SELECT * FROM historico WHERE idAtividade IS NULL", (err, res) => {
+
         if (err) {
             result(err, null);
             return;
