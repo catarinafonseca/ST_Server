@@ -55,7 +55,6 @@ exports.create = (req, res) => {
             idCategoria: req.body.idCategoria,
             concluida: "false"
         };
-        let user = data;
         if (!req.body || !activity) {
             res.status(400).json({ message: "Please check if all variables are filled!" });
             return;

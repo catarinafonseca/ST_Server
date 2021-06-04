@@ -62,7 +62,7 @@ exports.signin = async (req, res) => {
           message: "Invalid Password!",
         });
       }
-      const token = jwt.sign({ id: user.id }, config.secret, {
+      const token = jwt.sign({ id: user.id}, config.secret, {
         expiresIn: 86400, // 24 hours
       });
       return res.status(200).json({
@@ -97,9 +97,9 @@ exports.verifyToken = (req, res, next) => {
     next();
   });
 };
-exports.isAdmin = async (req, res, next) => {
+exports.isAdmin = async (req, res/* , next */) => {
   let user = await User.findById(req.loggedUserId);
-console.log(user);
+console.log("batata"+req.loggedUserId);
   /* if (user.idTipo === 3)
     next();
   console.log(req.idTipo) */

@@ -74,6 +74,7 @@ User.findById = (id, result) => {
             return
         }
         result({ kind: 'not found' }, null);
+        return
     });
 };
 User.findByEmail = (email, result) => {

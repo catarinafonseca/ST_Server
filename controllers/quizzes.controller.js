@@ -26,18 +26,6 @@ exports.findOne = (req, res) => {
     });
 };
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body || !quiz) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
-
-    if (req.body.resposta1 != req.body.resposta_certa && req.body.resposta2 != req.body.resposta_certa 
-        && req.body.resposta3 != req.body.resposta_certa && req.body.resposta4 != req.body.resposta_certa) {
-        res.status(400).json({ message: "No match between the 4 answers and the right answer." });
-        return;
-    }    
-
     const quiz = {
         tema: req.body.tema,
         desc_quiz: req.body.desc_quiz,
@@ -49,6 +37,22 @@ exports.create = (req, res) => {
         resposta_certa: req.body.resposta_certa,
         imagem: req.body.imagem
     };
+    // Validate request
+    if (!req.body || !quiz) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
+    if (quiz)
+        return res
+            .status(400)
+            .json({ message: "Failed! Quiz is already registered!" });
+
+
+    if (req.body.resposta1 != req.body.resposta_certa && req.body.resposta2 != req.body.resposta_certa
+        && req.body.resposta3 != req.body.resposta_certa && req.body.resposta4 != req.body.resposta_certa) {
+        res.status(400).json({ message: "No match between the 4 answers and the right answer." });
+        return;
+    }
 
     Quiz.create(quiz, (err, data) => {
         if (err)
@@ -61,7 +65,7 @@ exports.create = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    Quiz.remove(req.params.quizID, (err, data) => { 
+    Quiz.remove(req.params.quizID, (err, data) => {
         if (err) {
             if (err.kind === 'not found')
                 res.status(404).json({
@@ -75,5 +79,5 @@ exports.delete = (req, res) => {
             res.status(200).json({
                 message: `Deleted with sucess quiz with id ${req.params.quizID}.`
             });
-    }); 
+    });
 };
