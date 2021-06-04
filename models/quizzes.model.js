@@ -35,6 +35,19 @@ Quiz.findById = (id, result) => {
         result({ kind: 'not found' }, null);
     });
 };
+Quiz.findByName = (tema, result) => {
+    sql.query("SELECT * FROM quiz WHERE tema=?", [tema], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        if (res.length) {
+            result(null, res[0]);
+            return
+        }
+        result({ kind: 'not found' }, null);
+    });
+};
 Quiz.create = (newQuiz, result) => {
     sql.query("INSERT INTO quiz SET ?", newQuiz, (err, res) => {
         if (err) {

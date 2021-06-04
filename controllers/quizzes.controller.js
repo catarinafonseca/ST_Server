@@ -42,10 +42,6 @@ exports.create = (req, res) => {
         res.status(400).json({ message: "Please check if all variables are filled!" });
         return;
     }
-    if (quiz)
-        return res
-            .status(400)
-            .json({ message: "Failed! Quiz is already registered!" });
 
 
     if (req.body.resposta1 != req.body.resposta_certa && req.body.resposta2 != req.body.resposta_certa
@@ -54,15 +50,24 @@ exports.create = (req, res) => {
         return;
     }
 
-    Quiz.create(quiz, (err, data) => {
-        if (err)
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating this quiz."
+    Quiz.findByName(quiz.tema, (err, data) => {
+        console.log(err);
+        if (err) {
+             Quiz.create(Quiz, (err, data) => {
+                if (err)
+                    res.status(500).json({
+                        message: err.message || "Some error occurred while creating the Quiz."
+                    });
+                else {
+                        es.status(201).json({ message: "New Quiz created.", id: data.insertId, location: "/quizzes/" + data.insertId });
+                }
             });
-        else {
-            res.status(201).json({ message: "New quiz created.", location: "/quizzes/" + data.insertId });
-        }
+        } else
+            res.status(400).json({ message: "Failed! Quiz is already registered!" });
     });
+
+
+    
 };
 exports.delete = (req, res) => {
     Quiz.remove(req.params.quizID, (err, data) => {
