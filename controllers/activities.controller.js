@@ -49,7 +49,7 @@ exports.delete = (req, res) => {
 };
 exports.create = (req, res) => {
     Activity.findById(req.body.nome, (err, data) => {
-        
+
         let activity = {
             nome: req.body.nome,
             desc_atividade: req.body.desc_atividade,
@@ -67,7 +67,7 @@ exports.create = (req, res) => {
         }
         Activity.findByName(activity.nome, (err, data) => {
             if (err) {
-                if (err.kind === 'not found'){
+                if (err.kind === 'not found') {
                     Activity.create(activity, (err, data) => {
                         if (err)
                             res.status(500).json({
@@ -77,7 +77,7 @@ exports.create = (req, res) => {
                             res.status(201).json({ message: "New activity created.", id: data.insertId, location: "/activities/" + data.insertId });
                         }
                     });
-                } 
+                }
                 else
                     res.status(500).json({
                         message: `Some Error Occurred!`
@@ -85,17 +85,11 @@ exports.create = (req, res) => {
             } else
                 res.status(400).json({ message: "Failed! Activity is already registered!" });
         });
-        
+
     });
 };
 exports.update = (req, res) => {
-
-    // Validate request
-    if (!req.body || !activity) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
-    const activity = {
+    let activity = {
         nome: req.body.nome,
         desc_atividade: req.body.desc_atividade,
         num_participantes: req.body.num_participantes,
@@ -104,8 +98,14 @@ exports.update = (req, res) => {
         data_hora: req.body.data_hora,
         idLocal: req.body.idLocal,
         idCategoria: req.body.idCategoria,
-        concluida: req.body.concluida
+        concluida: "false"
     };
+    // Validate request
+    if (!req.body || !activity/* req.body.nome || !req.body.desc_atividade || !req.body.idLocal || req.body.data_hora */) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
+
     Activity.updateById(req.params.activityID, activity, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
