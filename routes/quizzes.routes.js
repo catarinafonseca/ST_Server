@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const quizController = require('../controllers/quizzes.controller');
+const authController= require("../controllers/auth.controller");
 
 router.use((req, res, next) => {
     const start = Date.now();
@@ -12,12 +13,12 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(quizController.findAll)
-    .post(quizController.create)
+    .get(authController.verifyToken,quizController.findAll)
+    .post(authController.verifyToken,authController.isProfessor,quizController.create)
 
  router.route('/:quizID')
-    .get(quizController.findOne)
-    .delete(quizController.delete)
+    .get(authController.verifyToken,quizController.findOne)
+    .delete(authController.verifyToken,authController.isAdmin,quizController.delete)
 
 //send a predefined error message for invalid routes on users
 router.all('*', function (req, res) {

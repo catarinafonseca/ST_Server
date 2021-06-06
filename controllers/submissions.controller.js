@@ -10,6 +10,16 @@ exports.findAll = (req, res) => {
             res.status(200).json(data);
     });
 };
+exports.findAllByLoggedUser = (req, res) => {
+    Submission.getAllByLoggedUser((err, data) => {
+        if (err)
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving Submissions."
+            });
+        else
+            res.status(200).json(data);
+    });
+};
 exports.findAllActivities = (req, res) => {
     Submission.getAllActivities((err, data) => {
         if (err)

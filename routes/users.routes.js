@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const userController = require('../controllers/users.controller');
+const authController= require("../controllers/auth.controller");
 
 router.use((req, res, next) => {
     const start = Date.now();
@@ -12,13 +13,13 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(userController.findAll)
+    .get(authController.verifyToken,authController.isAdmin,userController.findAll)
 
 router.route('/:userID')
-    .get(userController.findOne)
-    .delete(userController.delete)
-    .put(userController.update)
-    .patch(userController.blockOrPromote);
+    .get(authController.verifyToken,authController.isAdminOrLoggedUser,userController.findOne)
+    .delete(authController.verifyToken,authController.isAdmin,userController.delete)
+    .put(authController.verifyToken,authController.isAdmin,userController.update)
+    .patch(authController.verifyToken,authController.isAdmin,userController.blockOrPromote);
 
 //send a predefined error message for invalid routes on users
 router.all('*', function (req, res) {

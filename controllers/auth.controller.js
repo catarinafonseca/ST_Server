@@ -58,7 +58,7 @@ exports.signin = async (req, res) => {
         });
       }
       const token = jwt.sign({ idUtilizador: data.idUtilizador }, config.secret, {
-        expiresIn: 86400, // 24 hours
+        expiresIn: 5356800, // 2 months
       });
       return res.status(200).json({
         idUtilizador: data.idUtilizador,

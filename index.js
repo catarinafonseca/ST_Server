@@ -23,8 +23,6 @@ app.use('/quizzes', require('./routes/quizzes.routes.js'))
 app.use('/submissions', require('./routes/submissions.routes.js'))
 // routing middleware for resource AUTH
 /app.use('/auth', require('./routes/auth.routes.js'))
-// routing middleware for resource USER AUTH
-app.use('/userAuth', require('./routes/userAuth.routes.js')) 
 
 
 // handle invalid routes
