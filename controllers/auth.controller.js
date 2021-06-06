@@ -110,6 +110,15 @@ exports.isAdmin = async (req, res, next) => {
     next();
   })
 };
+exports.isAdminOrProfessor= async (req, res, next) => {
+  await User.findById(req.loggedUserId, (err, data) => {
+    console.log(data);
+    if (data.idTipo === 1 ) {
+      return res.status(403).send({ message: "Require Admin Role or Professor login!" });
+    }
+    next();
+  })
+};
 exports.isAdminOrLoggedUser= async (req, res, next) => {
   await User.findById(req.loggedUserId, (err, data) => {
     console.log(data);

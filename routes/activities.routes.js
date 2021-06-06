@@ -20,8 +20,8 @@ router.route('/concluded')
 
 router.route('/:activityID')
     .get(authController.verifyToken, activityController.findOne)
-    .delete(authController.verifyToken, authController.isProfessor,authController.isAdmin,activityController.delete)
-    .put(authController.verifyToken, authController.isProfessor,authController.isAdmin,activityController.update);
+    .delete(authController.verifyToken, authController.isAdminOrProfessor,activityController.delete)
+    .put(authController.verifyToken, authController.isAdminOrProfessor,activityController.update);
 
 //send a predefined error message for invalid routes on activities
 router.all('*', function (req, res) {
