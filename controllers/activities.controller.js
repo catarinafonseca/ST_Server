@@ -48,23 +48,24 @@ exports.delete = (req, res) => {
     });
 };
 exports.create = (req, res) => {
+    let activity = {
+        nome: req.body.nome,
+        desc_atividade: req.body.desc_atividade,
+        num_participantes: req.body.num_participantes,
+        imagem: req.body.imagem,
+        certificado_SN: req.body.certificado_SN,
+        data_hora: req.body.data_hora,
+        idLocal: req.body.idLocal,
+        idCategoria: req.body.idCategoria,
+        concluida: "false"
+    };
+    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem || !req.body.certificado_SN 
+        || !req.body.data_hora || !req.body.idLocal || !req.body.idCategoria) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
     Activity.findById(req.body.nome, (err, data) => {
 
-        let activity = {
-            nome: req.body.nome,
-            desc_atividade: req.body.desc_atividade,
-            num_participantes: req.body.num_participantes,
-            imagem: req.body.imagem,
-            certificado_SN: req.body.certificado_SN,
-            data_hora: req.body.data_hora,
-            idLocal: req.body.idLocal,
-            idCategoria: req.body.idCategoria,
-            concluida: "false"
-        };
-        if (!req.body || !activity) {
-            res.status(400).json({ message: "Please check if all variables are filled!" });
-            return;
-        }
         Activity.findByName(activity.nome, (err, data) => {
             if (err) {
                 if (err.kind === 'not found') {
