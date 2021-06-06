@@ -12,8 +12,11 @@ router.use((req, res, next) => {
     next()
 })
 router.route('/')
-    .get(authController.verifyToken,authController.isAdmin,submissionController.findAll)
     .get(authController.verifyToken,submissionController.findAllByLoggedUser)
+
+router.route('/admin')
+    .get(authController.verifyToken,authController.isAdmin,submissionController.findAll)
+
 
 router.route('/activities')
     .get(authController.verifyToken,authController.isAdmin,submissionController.findAllActivities)
