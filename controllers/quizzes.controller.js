@@ -38,7 +38,8 @@ exports.create = (req, res) => {
         imagem: req.body.imagem
     };
     // Validate request
-    if (!req.body || !quiz) {
+    if (!req.body || !req.body.tema || !req.body.desc_quiz || !req.body.pergunta || !req.body.resposta1 || !req.body.resposta2 
+        || !req.body.resposta3 || !req.body.resposta4 || !req.body.resposta_certa || !req.body.imagem) {
         res.status(400).json({ message: "Please check if all variables are filled!" });
         return;
     }
@@ -53,13 +54,13 @@ exports.create = (req, res) => {
     Quiz.findByName(quiz.pergunta, (err, data) => {
         console.log(err);
         if (err) {
-             Quiz.create(Quiz, (err, data) => {
+             Quiz.create(quiz, (err, data) => {
                 if (err)
                     res.status(500).json({
                         message: err.message || "Some error occurred while creating the Quiz."
                     });
                 else {
-                        es.status(201).json({ message: "New Quiz created.", id: data.insertId, location: "/quizzes/" + data.insertId });
+                        res.status(201).json({ message: "New Quiz created.", id: data.insertId, location: "/quizzes/" + data.insertId });
                 }
             });
         } else
