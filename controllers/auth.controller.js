@@ -92,20 +92,20 @@ exports.verifyToken = (req, res, next) => {
     next();
   });
 };
-exports.isAdmin = async (req, res, next) => {
-  await User.findById(req.loggedUserId, (err, data) => {
-    console.log(data);
-    if (data.idTipo !== 3) {
-      return res.status(403).send({ message: "Require Admin Role!" });
-    }
-    next();
-  })
-};
 exports.isProfessor = async (req, res, next) => {
   await User.findById(req.loggedUserId, (err, data) => {
     console.log(data);
     if (data.idTipo !== 2) {
       return res.status(403).send({ message: "Require Professor Role!" });
+    }
+    next();
+  })
+};
+exports.isAdmin = async (req, res, next) => {
+  await User.findById(req.loggedUserId, (err, data) => {
+    console.log(data);
+    if (data.idTipo !== 3) {
+      return res.status(403).send({ message: "Require Admin Role!" });
     }
     next();
   })
