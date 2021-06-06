@@ -122,7 +122,7 @@ exports.isAdminOrProfessor= async (req, res, next) => {
 exports.isAdminOrLoggedUser= async (req, res, next) => {
   await User.findById(req.loggedUserId, (err, data) => {
     console.log(data);
-    if (data.idTipo === 3 || data.idUtilizador == req.params.idUtilizador) {
+    if (data.idTipo !== 3 || data.idUtilizador == req.params.idUtilizador) {
       return res.status(403).send({ message: "Require Admin Role or Student login!" });
     }
     next();

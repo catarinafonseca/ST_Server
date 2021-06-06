@@ -43,9 +43,13 @@ exports.delete = (req, res) => {
     });
 };
 exports.update = (req, res) => {
-    const user = {
-        password: req.body.password,
-        imagem: req.body.imagem
+    let user = {
+        nome: req.body.nome,
+        email: req.body.email,
+        foto: req.body.foto,
+        idCurso: req.body.idCurso,
+        data_nasc: req.body.data_nasc,
+        password: req.body.password
     };
 
     User.updateById(req.params.userID, user, (err, data) => {

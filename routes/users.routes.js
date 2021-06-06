@@ -18,7 +18,7 @@ router.route('/')
 router.route('/:userID')
     .get(authController.verifyToken,authController.isAdminOrLoggedUser,userController.findOne)
     .delete(authController.verifyToken,authController.isAdmin,userController.delete)
-    .put(authController.verifyToken,authController.isAdmin,userController.update)
+    .put(authController.verifyToken,authController.isAdminOrLoggedUser,userController.update)
     .patch(authController.verifyToken,authController.isAdmin,userController.blockOrPromote);
 
 //send a predefined error message for invalid routes on users
