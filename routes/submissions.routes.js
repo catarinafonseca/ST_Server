@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 router.route('/')
     .get(authController.verifyToken,submissionController.findAllByLoggedUser)
 
-router.route('/admin')
+router.route('/admin') //
     .get(authController.verifyToken,authController.isAdmin,submissionController.findAll)
 
 
@@ -28,7 +28,7 @@ router.route('/quizzes')
 
 router.route('/:submissionID')
     .get(authController.verifyToken,authController.isAdmin,submissionController.findOne)
-    .delete(authController.verifyToken,authController.isAdmin,submissionController.delete)
+    .delete(authController.verifyToken,submissionController.delete)
     
 //send a predefined error message for invalid routes on activities
 router.all('*', function (req, res) {
