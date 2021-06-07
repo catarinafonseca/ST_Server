@@ -19,8 +19,12 @@ router.route('/:userID')
     .get(authController.verifyToken,authController.isAdminOrLoggedUser,userController.findOne)
     .delete(authController.verifyToken,authController.isAdmin,userController.delete)
     .put(authController.verifyToken,authController.isAdminOrLoggedUser,userController.update)
-    .patch(authController.verifyToken,authController.isAdmin,userController.blockOrPromote);
 
+router.route('/:userID/block')
+    .patch(authController.verifyToken,authController.isAdmin,userController.block);
+
+router.route('/:userID/promote')
+    .patch(authController.verifyToken,authController.isAdmin,userController.promote);
 //send a predefined error message for invalid routes on users
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'USERS: what???' });

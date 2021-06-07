@@ -67,9 +67,28 @@ exports.update = (req, res) => {
             res.status(200).json({ message: "Updated user.", location: `/users/${req.params.userID}` });
     });
 };
-exports.blockOrPromote = (req, res) => {
-    const user = {
+exports.block = (req, res) => {
+    let user = {
         blocked: req.body.blocked,
+    };
+
+    User.updateById(req.params.userID, user, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).json({
+                    message: `Not found user with id ${req.params.userID}.`
+                });
+            } else {
+                res.status(500).json({
+                    message: `Error blocking user with id ${req.params.userID}.`
+                });
+            }
+        } else
+            res.status(200).json({ message: "Blocked user.", location: `/users/${req.params.userID}` });
+    });
+};
+exports.promote = (req, res) => {
+    let user = {
         idTipo: req.body.idTipo
     };
 
@@ -81,10 +100,10 @@ exports.blockOrPromote = (req, res) => {
                 });
             } else {
                 res.status(500).json({
-                    message: `Error updating user with id ${req.params.userID}.`
+                    message: `Error promoting user with id ${req.params.userID}.`
                 });
             }
         } else
-            res.status(200).json({ message: "Updated user.", location: `/users/${req.params.userID}` });
+            res.status(200).json({ message: "Promoted user.", location: `/users/${req.params.userID}` });
     });
 };
