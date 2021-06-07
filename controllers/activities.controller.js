@@ -48,6 +48,14 @@ exports.delete = (req, res) => {
     });
 };
 exports.create = (req, res) => {
+    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem || !req.body.certificado_SN 
+        || !req.body.data_hora || !req.body.idLocal || !req.body.idCategoria) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
+    let date= new Date()
+    let today= date.getUTCDate()
+console.log(today);
     let activity = {
         nome: req.body.nome,
         desc_atividade: req.body.desc_atividade,
@@ -59,11 +67,6 @@ exports.create = (req, res) => {
         idCategoria: req.body.idCategoria,
         concluida: "false"
     };
-    if (!req.body || !req.body.nome || !req.body.desc_atividade || !req.body.num_participantes || !req.body.imagem || !req.body.certificado_SN 
-        || !req.body.data_hora || !req.body.idLocal || !req.body.idCategoria) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
     Activity.findById(req.body.nome, (err, data) => {
 
         Activity.findByName(activity.nome, (err, data) => {

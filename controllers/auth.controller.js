@@ -19,6 +19,11 @@ exports.signup = async (req, res) => {
           .status(400)
           .json({ message: "Failed! Email is already in use!" });
 
+      if(req.body.password!=req.body.password2){
+        res.status(400).json({ message: "Please check if all passwords match!" });
+        return;
+      }
+      
       user = User.create({
         nome: req.body.nome,
         email: req.body.email,
