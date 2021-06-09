@@ -35,8 +35,8 @@ Quiz.findById = (id, result) => {
         result({ kind: 'not found' }, null);
     });
 };
-Quiz.findByName = (tema, result) => {
-    sql.query("SELECT * FROM quiz WHERE tema=?", [tema], (err, res) => {
+Quiz.findByName = (pergunta, result) => {
+    sql.query("SELECT * FROM quiz WHERE pergunta=?", [pergunta], (err, res) => {
         if (err) {
             result(err, null);
             return;

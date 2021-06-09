@@ -86,16 +86,16 @@ exports.createActivity = (req, res) => {
     })
 };
 exports.createQuiz = (req, res) => {
+    // Validate request
+    if (!req.body || !req.body.idUtilizador || !req.body.idQuiz || !req.body.data_hora) {
+        res.status(400).json({ message: "Please check if all variables are filled!" });
+        return;
+    }
     const submission = {
         idUtilizador: req.body.idUtilizador,
         idQuiz: req.body.idQuiz,
         data_hora: req.body.data_hora,
     };
-    // Validate request
-    if (!req.body || !submission) {
-        res.status(400).json({ message: "Please check if all variables are filled!" });
-        return;
-    }
 
     Submission.create(submission, (err, data) => {
         if (err)

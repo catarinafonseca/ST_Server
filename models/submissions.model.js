@@ -16,13 +16,17 @@ Submission.getAll = (result) => {
         result(null, res);
     });
 };
-Submission.getAllByLoggedUser = (id,result) => {
-    sql.query("SELECT * FROM historico WHERE idUtilizador=?", [id],(err, res) => {
+Submission.getAllByLoggedUser = (idUtilizador,result) => {
+    sql.query("SELECT * FROM historico WHERE idUtilizador=?", [idUtilizador],(err, res) => {
         if (err) {
             result(err, null);
             return;
         }
-        result(null, res);
+        if (res.length) {
+            result(null, res[0]);
+            return
+        }
+        result({ kind: 'not found' }, null);
     });
 };
 Submission.findById = (id, result) => {

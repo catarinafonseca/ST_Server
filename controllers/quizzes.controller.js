@@ -51,7 +51,7 @@ exports.create = (req, res) => {
         return;
     }
 
-    Quiz.findByName(quiz.tema, (err, data) => {
+    Quiz.findByName(quiz.pergunta, (err, data) => {
         console.log(err);
         if (err) {
              Quiz.create(quiz, (err, data) => {
